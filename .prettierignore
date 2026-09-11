@@ -1,7 +1,16 @@
+# Prettier also reads .gitignore, so dist/ and node_modules/ are already excluded.
 node_modules/
+dist/
+dist-ssr/
 coverage/
 .pnpm-store/
-pnpm-lock.yaml
+public/
+
+# Lockfiles
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# Generated / vendored
+*.min.js
+*.min.css
