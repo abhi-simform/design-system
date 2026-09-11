@@ -72,7 +72,14 @@ export function ShellHeader({ onOpenNav }: { onOpenNav: () => void }) {
         href={OVERVIEW_HREF}
         className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
       >
-        <span className="size-5 rounded-md bg-primary" />
+        <img
+          src="/logo.svg"
+          alt=""
+          aria-hidden="true"
+          width={30}
+          height={33}
+          className="h-5 w-auto shrink-0"
+        />
         <span className="font-heading text-sm font-medium tracking-tight">
           Design System
         </span>

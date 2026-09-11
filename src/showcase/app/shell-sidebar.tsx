@@ -10,7 +10,11 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { Input } from "@/components/ui/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group"
 import { Kbd } from "@/components/ui/kbd"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -126,19 +130,24 @@ export function ShellSidebar({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="relative shrink-0 px-3 pt-3 pb-1">
-        <SearchIcon className="pointer-events-none absolute top-1/2 left-5.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          ref={searchRef}
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search components"
-          aria-label="Search components"
-          className="pr-9 pl-8"
-        />
-        {query === "" ? (
-          <Kbd className="absolute top-1/2 right-5 -translate-y-1/2">/</Kbd>
-        ) : null}
+      <div className="shrink-0 px-3 pt-3 pb-1">
+        <InputGroup>
+          <InputGroupAddon align="inline-start">
+            <SearchIcon />
+          </InputGroupAddon>
+          <InputGroupInput
+            ref={searchRef}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search components"
+            aria-label="Search components"
+          />
+          {query === "" ? (
+            <InputGroupAddon align="inline-end">
+              <Kbd>/</Kbd>
+            </InputGroupAddon>
+          ) : null}
+        </InputGroup>
       </div>
 
       <ScrollArea className="min-h-0 flex-1">
