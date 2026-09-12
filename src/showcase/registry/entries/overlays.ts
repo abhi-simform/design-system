@@ -37,6 +37,13 @@ import {
   HoverCardSides,
 } from "@/showcase/demos/hover-card"
 import {
+  OverlayBasic,
+  OverlayBlur,
+  OverlayFixed,
+  OverlayGradient,
+  OverlayPlayground,
+} from "@/showcase/demos/overlay"
+import {
   PopoverBasic,
   PopoverPlayground,
   PopoverSides,
@@ -320,6 +327,96 @@ const drawerEntry: ComponentEntry = {
       component: DrawerNonModal,
       sourceModule: "drawer",
       sourceExport: "DrawerNonModal",
+    },
+  ],
+}
+
+const overlayEntry: ComponentEntry = {
+  id: "overlay",
+  name: "Overlay",
+  category: "Overlays",
+  description:
+    "A plain colored, gradient, or blurred backdrop div — the standalone primitive underneath things like a modal's backdrop, not tied to any open/close context of its own.",
+  sourcePath: "src/components/ui/overlay.tsx",
+  importStatement: 'import { Overlay } from "@/components/ui/overlay"',
+  exports: ["Overlay"],
+  keywords: ["backdrop", "scrim", "blur", "gradient", "loading overlay"],
+  notes: [
+    "Unlike DialogOverlay/SheetOverlay/DrawerOverlay/AlertDialogOverlay, this isn't tied to any primitive's open state — mount and unmount it yourself (see the toggle in the basic story).",
+    "gradient overrides color and backgroundOpacity entirely — it's set as the raw background value.",
+    "fixed switches from absolute (fills the nearest positioned ancestor) to fixed (fills the viewport, or a transformed ancestor if one exists in between).",
+    "backdrop-filter is not supported in every browser — blur degrades gracefully to no blur, not to a hard failure.",
+  ],
+  playground: definePlayground({
+    tag: "Overlay",
+    component: OverlayPlayground,
+    controls: {
+      color: textControl({ label: "Color", defaultValue: "#000" }),
+      backgroundOpacity: numberControl({
+        label: "Background opacity",
+        defaultValue: 0.6,
+        min: 0,
+        max: 1,
+        step: 0.05,
+      }),
+      blur: numberControl({
+        label: "Blur (px)",
+        defaultValue: 0,
+        min: 0,
+        max: 20,
+      }),
+      radius: selectControl({
+        label: "Radius",
+        options: [
+          "none",
+          "sm",
+          "md",
+          "lg",
+          "xl",
+          "2xl",
+          "3xl",
+          "4xl",
+          "full",
+        ] as const,
+        defaultValue: "none",
+      }),
+      center: booleanControl({ label: "Center content", defaultValue: false }),
+      fixed: booleanControl({ label: "Fixed", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Basic",
+      description: "color and backgroundOpacity, toggled on and off.",
+      component: OverlayBasic,
+      sourceModule: "overlay",
+      sourceExport: "OverlayBasic",
+    },
+    {
+      id: "gradient",
+      title: "Gradient",
+      description: "gradient replaces the solid color entirely.",
+      component: OverlayGradient,
+      sourceModule: "overlay",
+      sourceExport: "OverlayGradient",
+    },
+    {
+      id: "blur",
+      title: "Blur",
+      description: "blur adds a backdrop-filter blur on top of a light tint.",
+      component: OverlayBlur,
+      sourceModule: "overlay",
+      sourceExport: "OverlayBlur",
+    },
+    {
+      id: "fixed",
+      title: "Fixed positioning",
+      description:
+        "fixed switches from absolute to fixed positioning — trapped here inside a transformed ancestor so it doesn't cover the real page.",
+      component: OverlayFixed,
+      sourceModule: "overlay",
+      sourceExport: "OverlayFixed",
     },
   ],
 }
@@ -690,6 +787,7 @@ export const overlaysEntries: readonly ComponentEntry[] = [
   alertDialogEntry,
   sheetEntry,
   drawerEntry,
+  overlayEntry,
   popoverEntry,
   tooltipEntry,
   hoverCardEntry,

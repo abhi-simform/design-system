@@ -123,6 +123,40 @@ Don't assume — check, every time (styles drift between components):
   the generated stylesheet (scoped class), never via inline `style`. Only
   values with no possible override (non-responsive props, or the reference
   `var(--x)` indirection itself) may go through inline `style`.
+- **Default every prop to a static Tailwind class, not inline `style`.**
+  When a prop's possible values form a fixed, enumerable set — Mantine's own
+  spacing/radius scale (`xs`–`xl` → `gap-2.5`/`gap-3`/`gap-4`/`gap-5`/`gap-6`,
+  or `rounded-sm`/`rounded-md`/…), a CSS keyword union
+  (`align`/`justify`/`overflow` and similar), or any other closed enum — map
+  each value to its Tailwind utility in a `Record<Enum, string>` and apply it
+  through `cn("...", tokenClass, className)`, never through `style={{ ... }}`.
+  Narrow the exposed prop's TypeScript type to that closed union (not the
+  wider `React.CSSProperties["..."]` or `number | string`) and don't add an
+  inline-`style` fallback "just in case" for a value outside the enum — a
+  consumer who needs something the enum doesn't cover overrides via
+  `className` instead (e.g. `className="gap-20"` for an 80px gap,
+  `className="rounded-[3px]"` for a one-off radius). This works reliably
+  because `cn` (this repo's `tailwind-merge`-equivalent) resolves same-group
+  conflicts deterministically in favor of whichever class came later in the
+  arguments, regardless of generation order — verified with
+  `cn("gap-4", ..., "gap-20")` → `"gap-4"` is dropped, `"gap-20"` survives.
+  Plain CSS cascade order (two literal classes both present in the DOM) does
+  **not** give you this guarantee on its own.
+  Reserve inline `style`/CSS custom properties for genuinely **floating
+  dynamic values** that Tailwind cannot express as a static class at
+  all — because the scanner only ever sees literal source text, a class
+  built at runtime (`` `gap-[${n}px]` ``, `` cn(`p-${size}`) ``) will never
+  be generated and silently does nothing:
+  - An unbounded/continuous input with no natural enum — an arbitrary color,
+    an opacity, a blur radius, a z-index, a duration in ms.
+  - A value another element's `calc()`/`var()` depends on (Grid's own `gap`,
+    which `GridCol`'s flex-basis/offset formulas reference) — see the
+    var-must-always-be-defined rule above.
+  - A per-breakpoint responsive value needing a generated `<style>` tag (the
+    rule above).
+  - A value driven by a JS state machine frame-by-frame (e.g. a `Transition`
+    component's computed `transform`/`opacity` per animation phase) — there's
+    no static class for "whatever the animation is doing right now."
 - **Make the port behave like a native layout primitive here, not just a
   literal prop-for-prop clone.** E.g. a layout container should default to
   filling its parent's width (`w-full`) the way this repo's other layout
@@ -154,14 +188,13 @@ Don't assume — check, every time (styles drift between components):
 - Export the props types too (`export type { XProps, ... }`) — useful for
   consumers, matches how Mantine itself exports them.
 
-## 6. Showcase integration — ask first
+## 6. Showcase integration — always add it
 
-Every existing `src/components/ui/*` file has a matching showcase entry.
-Before adding one for this port, use `AskUserQuestion` to confirm (don't
-assume): (1) whether to add showcase docs at all, and (2) whether to port
-any advanced/secondary prop that adds real complexity (e.g. a
-container-query mode, an alternate rendering strategy) or keep to the
-common case only. If showcase docs are wanted:
+Every existing `src/components/ui/*` file has a matching showcase entry —
+always add one for this port too, no need to ask. Do use
+`AskUserQuestion` to confirm whether to port any advanced/secondary prop
+that adds real complexity (e.g. a container-query mode, an alternate
+rendering strategy) or keep to the common case only.
 
 - `src/showcase/demos/<kebab-name>.tsx` — a `<Name>Playground` component
   wired to `definePlayground()` controls, plus a few `<Name><Variant>` story
@@ -195,3 +228,13 @@ common case only. If showcase docs are wanted:
    computed values, not visual plausibility.
 4. Re-grep the full diff for the source library's name, case-insensitive,
    before calling the port done.
+5. Grep the new component file for `style={{` / `style:`. For each hit,
+   confirm it's one of the genuine exceptions listed in step 4 (a value
+   feeding a `calc()`/`var()` elsewhere, a per-breakpoint responsive value, an
+   unbounded continuous input, or a JS-driven animation frame) — if the value
+   is actually a fixed enum, it's a bug: convert it to a `Record<Enum, string>`
+   Tailwind-class lookup instead. Confirm in the browser via
+   `el.getAttribute("style")` that the enumerable props you did map produce
+   an empty/absent `style` attribute, not just that the computed CSS looks
+   right (a leftover inline value can coincidentally match the intended
+   result and hide the bug).

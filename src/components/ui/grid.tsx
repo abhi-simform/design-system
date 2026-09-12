@@ -46,6 +46,64 @@ function getSpacing(value: GridSpacing | undefined) {
   return DEFAULT_SPACING[value] ?? value
 }
 
+type GridJustify =
+  | "center"
+  | "normal"
+  | "start"
+  | "flex-start"
+  | "end"
+  | "flex-end"
+  | "space-between"
+  | "space-around"
+  | "space-evenly"
+
+type GridAlign =
+  | "stretch"
+  | "center"
+  | "baseline"
+  | "normal"
+  | "start"
+  | "flex-start"
+  | "end"
+  | "flex-end"
+
+type GridOverflow = "visible" | "hidden" | "clip" | "scroll" | "auto"
+
+// justify/align/overflow are plain (non-responsive) values, so every option
+// maps to a static Tailwind class instead of an inline style — unlike gap,
+// none of them feed a calc() elsewhere, so there's no reason for them to be
+// CSS custom properties.
+const JUSTIFY_CLASSES: Record<GridJustify, string> = {
+  center: "justify-center",
+  normal: "justify-normal",
+  start: "justify-start",
+  "flex-start": "justify-start",
+  end: "justify-end",
+  "flex-end": "justify-end",
+  "space-between": "justify-between",
+  "space-around": "justify-around",
+  "space-evenly": "justify-evenly",
+}
+
+const ALIGN_CLASSES: Record<GridAlign, string> = {
+  stretch: "items-stretch",
+  center: "items-center",
+  baseline: "items-baseline",
+  normal: "items-normal",
+  start: "items-start",
+  "flex-start": "items-start",
+  end: "items-end",
+  "flex-end": "items-end",
+}
+
+const OVERFLOW_CLASSES: Record<GridOverflow, string> = {
+  visible: "overflow-visible",
+  hidden: "overflow-hidden",
+  clip: "overflow-clip",
+  scroll: "overflow-scroll",
+  auto: "overflow-auto",
+}
+
 function getSortedBreakpointKeys(breakpoints: GridBreakpoints) {
   return (Object.keys(breakpoints) as BreakpointKey[]).sort(
     (a, b) =>
@@ -115,10 +173,10 @@ interface GridProps extends React.ComponentProps<"div"> {
   rowGap?: ResponsiveValue<GridSpacing>
   columnGap?: ResponsiveValue<GridSpacing>
   grow?: boolean
-  justify?: React.CSSProperties["justifyContent"]
-  align?: React.CSSProperties["alignItems"]
+  justify?: GridJustify
+  align?: GridAlign
   columns?: number
-  overflow?: React.CSSProperties["overflow"]
+  overflow?: GridOverflow
   type?: GridQueryType
   breakpoints?: GridBreakpoints
 }
@@ -186,17 +244,22 @@ function Grid({
   const root = (
     <div
       data-slot="grid"
-      style={{ ...style, overflow }}
-      className={cn("w-full", responsiveClassName, className)}
+      style={style}
+      className={cn(
+        "w-full",
+        OVERFLOW_CLASSES[overflow],
+        responsiveClassName,
+        className,
+      )}
       {...props}
     >
       <div
-        className="flex w-full flex-wrap"
-        style={{
-          gap: "var(--grid-row-gap) var(--grid-column-gap)",
-          justifyContent: justify,
-          alignItems: align,
-        }}
+        className={cn(
+          "flex w-full flex-wrap",
+          justify && JUSTIFY_CLASSES[justify],
+          align && ALIGN_CLASSES[align],
+        )}
+        style={{ gap: "var(--grid-row-gap) var(--grid-column-gap)" }}
       >
         {children}
       </div>

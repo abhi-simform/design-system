@@ -18,10 +18,23 @@ import {
   AspectRatioWithContent,
 } from "@/showcase/demos/aspect-ratio"
 import {
+  BoxAsLink,
+  BoxAsSection,
+  BoxDefault,
+  BoxPlayground,
+} from "@/showcase/demos/box"
+import {
   CollapsibleBasic,
   CollapsibleDefaultOpen,
   CollapsiblePlayground,
 } from "@/showcase/demos/collapsible"
+import {
+  FlexDefault,
+  FlexDirection,
+  FlexGapLonghands,
+  FlexPlayground,
+  FlexResponsive,
+} from "@/showcase/demos/flex"
 import {
   GridContainerQueries,
   GridGrow,
@@ -29,6 +42,14 @@ import {
   GridPlayground,
   GridResponsiveSpans,
 } from "@/showcase/demos/grid"
+import {
+  GroupAsSection,
+  GroupDefault,
+  GroupGrow,
+  GroupJustify,
+  GroupPlayground,
+  GroupWrap,
+} from "@/showcase/demos/group"
 import {
   ScrollAreaHorizontal,
   ScrollAreaPlayground,
@@ -39,6 +60,12 @@ import {
   SeparatorPlayground,
   SeparatorVertical,
 } from "@/showcase/demos/separator"
+import {
+  StackAlign,
+  StackAsSection,
+  StackDefault,
+  StackPlayground,
+} from "@/showcase/demos/stack"
 
 // Deferred so their third-party dependency stays out of the initial bundle.
 const CarouselBasic = lazyDemo(
@@ -181,6 +208,60 @@ const aspectRatioEntry: ComponentEntry = {
   ],
 }
 
+const boxEntry: ComponentEntry = {
+  id: "box",
+  name: "Box",
+  category: "Layout",
+  description:
+    "The base polymorphic element other components build on — a div by default, or any element via the render prop, with no styling of its own.",
+  sourcePath: "src/components/ui/box.tsx",
+  importStatement: 'import { Box } from "@/components/ui/box"',
+  exports: ["Box"],
+  keywords: ["polymorphic", "render", "as", "primitive", "wrapper", "element"],
+  notes: [
+    "Box carries no default styling — className/style are the only way to affect appearance, exactly like a plain <div>.",
+    'Swap the rendered element with the render prop (Base UI\'s polymorphism idiom), e.g. render={<a href="/" />} — not a component="a" string prop.',
+  ],
+  playground: definePlayground({
+    tag: "Box",
+    component: BoxPlayground,
+    snippet: (values) =>
+      values.as === "div"
+        ? `<Box className="...">Rendered as a div</Box>`
+        : `<Box render={<${values.as}${values.as === "a" ? ' href="#"' : ""} />} className="...">\n  Rendered as a ${values.as}\n</Box>`,
+    controls: {
+      as: selectControl({
+        label: "Renders as",
+        options: ["div", "section", "span", "a"],
+        defaultValue: "div",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Default",
+      component: BoxDefault,
+      sourceModule: "box",
+      sourceExport: "BoxDefault",
+    },
+    {
+      id: "as-link",
+      title: "As a link",
+      component: BoxAsLink,
+      sourceModule: "box",
+      sourceExport: "BoxAsLink",
+    },
+    {
+      id: "as-section",
+      title: "As a section",
+      component: BoxAsSection,
+      sourceModule: "box",
+      sourceExport: "BoxAsSection",
+    },
+  ],
+}
+
 const carouselEntry: ComponentEntry = {
   id: "carousel",
   name: "Carousel",
@@ -306,6 +387,102 @@ const collapsibleEntry: ComponentEntry = {
   ],
 }
 
+const flexEntry: ComponentEntry = {
+  id: "flex",
+  name: "Flex",
+  category: "Layout",
+  description:
+    "A low-level flexbox wrapper — gap, rowGap, columnGap, align, justify, wrap and direction each accept a responsive object like { base: 'column', sm: 'row' }.",
+  sourcePath: "src/components/ui/flex.tsx",
+  importStatement: 'import { Flex } from "@/components/ui/flex"',
+  exports: ["Flex"],
+  keywords: [
+    "layout",
+    "flexbox",
+    "responsive",
+    "gap",
+    "direction",
+    "wrap",
+    "breakpoints",
+  ],
+  notes: [
+    "Unlike Grid, Flex has no default gap/align/justify/wrap/direction — only display: flex is unconditional, and it doesn't default to full width either.",
+    "Responsive props use their own base/xs/sm/md/lg/xl breakpoint scale, not Tailwind's — so direction={{ base: 'column', sm: 'row' }} reflows at 48em regardless of Tailwind's sm.",
+    "gap is normalized into rowGap/columnGap internally, so the two can be set independently without conflicting.",
+  ],
+  playground: definePlayground({
+    tag: "Flex",
+    layout: "stretch",
+    component: FlexPlayground,
+    controls: {
+      gap: selectControl({
+        label: "Gap",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      align: selectControl({
+        label: "Align",
+        options: ["stretch", "center", "flex-start", "flex-end"],
+        defaultValue: "stretch",
+      }),
+      justify: selectControl({
+        label: "Justify",
+        options: [
+          "flex-start",
+          "center",
+          "flex-end",
+          "space-between",
+          "space-around",
+        ],
+        defaultValue: "flex-start",
+      }),
+      wrap: selectControl({
+        label: "Wrap",
+        options: ["wrap", "nowrap"],
+        defaultValue: "wrap",
+      }),
+      direction: selectControl({
+        label: "Direction",
+        options: ["row", "column"],
+        defaultValue: "row",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Default",
+      component: FlexDefault,
+      sourceModule: "flex",
+      sourceExport: "FlexDefault",
+    },
+    {
+      id: "direction",
+      title: "Direction",
+      component: FlexDirection,
+      sourceModule: "flex",
+      sourceExport: "FlexDirection",
+    },
+    {
+      id: "responsive",
+      title: "Responsive direction and gap",
+      description:
+        "direction and gap both switch at Flex's sm breakpoint (48em).",
+      component: FlexResponsive,
+      layout: "stretch",
+      sourceModule: "flex",
+      sourceExport: "FlexResponsive",
+    },
+    {
+      id: "gap-longhands",
+      title: "Independent row/column gap",
+      component: FlexGapLonghands,
+      sourceModule: "flex",
+      sourceExport: "FlexGapLonghands",
+    },
+  ],
+}
+
 const gridEntry: ComponentEntry = {
   id: "grid",
   name: "Grid",
@@ -392,6 +569,98 @@ const gridEntry: ComponentEntry = {
       layout: "stretch",
       sourceModule: "grid",
       sourceExport: "GridContainerQueries",
+    },
+  ],
+}
+
+const groupEntry: ComponentEntry = {
+  id: "group",
+  name: "Group",
+  category: "Layout",
+  description:
+    "A horizontal flex layout — the row-axis counterpart to Stack, with an optional grow mode that makes children equal-width.",
+  sourcePath: "src/components/ui/group.tsx",
+  importStatement: 'import { Group } from "@/components/ui/group"',
+  exports: ["Group"],
+  keywords: ["layout", "flex", "row", "horizontal", "spacing", "gap", "grow"],
+  notes: [
+    "gap/align/justify/wrap are plain values, not responsive objects — same as Stack.",
+    "grow gives every child flex-grow: 1. With preventGrowOverflow (the default), children are also capped to an equal max-width, so they line up evenly instead of growing unevenly — set preventGrowOverflow={false} to allow uneven growth.",
+    "Group is built on Box, so it also accepts a render prop to swap the rendered element, e.g. render={<section />}.",
+  ],
+  playground: definePlayground({
+    tag: "Group",
+    layout: "stretch",
+    component: GroupPlayground,
+    controls: {
+      gap: selectControl({
+        label: "Gap",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      align: selectControl({
+        label: "Align",
+        options: ["stretch", "center", "flex-start", "flex-end"],
+        defaultValue: "center",
+      }),
+      justify: selectControl({
+        label: "Justify",
+        options: [
+          "flex-start",
+          "center",
+          "flex-end",
+          "space-between",
+          "space-around",
+        ],
+        defaultValue: "flex-start",
+      }),
+      wrap: selectControl({
+        label: "Wrap",
+        options: ["wrap", "nowrap"],
+        defaultValue: "wrap",
+      }),
+      grow: booleanControl({ label: "Grow", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Default",
+      component: GroupDefault,
+      sourceModule: "group",
+      sourceExport: "GroupDefault",
+    },
+    {
+      id: "justify",
+      title: "Justify",
+      component: GroupJustify,
+      layout: "stretch",
+      sourceModule: "group",
+      sourceExport: "GroupJustify",
+    },
+    {
+      id: "wrap",
+      title: "Wrap",
+      component: GroupWrap,
+      sourceModule: "group",
+      sourceExport: "GroupWrap",
+    },
+    {
+      id: "grow",
+      title: "Grow",
+      description:
+        "preventGrowOverflow (default true) caps each child to an equal share of the row.",
+      component: GroupGrow,
+      sourceModule: "group",
+      sourceExport: "GroupGrow",
+    },
+    {
+      id: "as-section",
+      title: "As a section",
+      description: "Group inherits Box's render prop.",
+      component: GroupAsSection,
+      sourceModule: "group",
+      sourceExport: "GroupAsSection",
     },
   ],
 }
@@ -545,13 +814,87 @@ const separatorEntry: ComponentEntry = {
   ],
 }
 
+const stackEntry: ComponentEntry = {
+  id: "stack",
+  name: "Stack",
+  category: "Layout",
+  description:
+    "A vertical flex layout — the simplest way to space a column of children with a consistent gap.",
+  sourcePath: "src/components/ui/stack.tsx",
+  importStatement: 'import { Stack } from "@/components/ui/stack"',
+  exports: ["Stack"],
+  keywords: ["layout", "flex", "column", "vertical", "spacing", "gap"],
+  notes: [
+    "gap/align/justify are plain values, not responsive objects — unlike Grid, Stack has no breakpoint scale to opt into.",
+    'The xs–xl gap tokens and every align/justify keyword map to a static Tailwind class (gap-4, items-center, justify-between, …) — no inline styles. A gap outside that scale isn\'t a prop value; pass a raw utility via className instead, e.g. className="gap-20" for 80px.',
+    "Stack is built on Box, so it also accepts a render prop to swap the rendered element, e.g. render={<section />}.",
+  ],
+  playground: definePlayground({
+    tag: "Stack",
+    layout: "stretch",
+    component: StackPlayground,
+    controls: {
+      gap: selectControl({
+        label: "Gap",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      align: selectControl({
+        label: "Align",
+        options: ["stretch", "center", "flex-start", "flex-end"],
+        defaultValue: "stretch",
+      }),
+      justify: selectControl({
+        label: "Justify",
+        options: [
+          "flex-start",
+          "center",
+          "flex-end",
+          "space-between",
+          "space-around",
+        ],
+        defaultValue: "flex-start",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Default",
+      component: StackDefault,
+      sourceModule: "stack",
+      sourceExport: "StackDefault",
+    },
+    {
+      id: "alignment",
+      title: "Alignment",
+      component: StackAlign,
+      layout: "stretch",
+      sourceModule: "stack",
+      sourceExport: "StackAlign",
+    },
+    {
+      id: "as-section",
+      title: "As a section",
+      description: "Stack inherits Box's render prop.",
+      component: StackAsSection,
+      sourceModule: "stack",
+      sourceExport: "StackAsSection",
+    },
+  ],
+}
+
 export const layoutEntries: readonly ComponentEntry[] = [
   accordionEntry,
   aspectRatioEntry,
+  boxEntry,
   carouselEntry,
   collapsibleEntry,
+  flexEntry,
   gridEntry,
+  groupEntry,
   resizableEntry,
   scrollAreaEntry,
   separatorEntry,
+  stackEntry,
 ]
