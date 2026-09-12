@@ -1,4 +1,8 @@
-import { booleanControl, selectControl } from "@/showcase/lib/controls"
+import {
+  booleanControl,
+  numberControl,
+  selectControl,
+} from "@/showcase/lib/controls"
 import { definePlayground } from "@/showcase/registry/define-playground"
 import { lazyDemo } from "@/showcase/registry/lazy-demo"
 import type { ComponentEntry } from "@/showcase/registry/types"
@@ -18,6 +22,13 @@ import {
   CollapsibleDefaultOpen,
   CollapsiblePlayground,
 } from "@/showcase/demos/collapsible"
+import {
+  GridContainerQueries,
+  GridGrow,
+  GridOffsetAndOrder,
+  GridPlayground,
+  GridResponsiveSpans,
+} from "@/showcase/demos/grid"
 import {
   ScrollAreaHorizontal,
   ScrollAreaPlayground,
@@ -295,6 +306,96 @@ const collapsibleEntry: ComponentEntry = {
   ],
 }
 
+const gridEntry: ComponentEntry = {
+  id: "grid",
+  name: "Grid",
+  category: "Layout",
+  description:
+    "A responsive 12-column flexbox layout — span, offset, order and gap all accept a responsive object like { base: 12, md: 6 }.",
+  sourcePath: "src/components/ui/grid.tsx",
+  importStatement: 'import { Grid, GridCol } from "@/components/ui/grid"',
+  exports: ["Grid", "GridCol"],
+  keywords: [
+    "layout",
+    "columns",
+    "responsive",
+    "flexbox",
+    "col",
+    "breakpoints",
+  ],
+  notes: [
+    "Grid.Col also works as a static property, e.g. <Grid.Col />.",
+    "Responsive props use their own base/xs/sm/md/lg/xl breakpoint scale, not Tailwind's — so span={{ base: 12, md: 6 }} reflows at 62em regardless of Tailwind's md.",
+    'type="container" switches span/order/offset to container queries instead of viewport media queries, using the breakpoints prop (defaults to the same scale).',
+  ],
+  playground: definePlayground({
+    tag: "Grid",
+    layout: "stretch",
+    component: GridPlayground,
+    controls: {
+      columns: numberControl({
+        label: "Columns",
+        defaultValue: 12,
+        min: 2,
+        max: 12,
+      }),
+      gap: selectControl({
+        label: "Gap",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      grow: booleanControl({ label: "Grow", defaultValue: false }),
+      justify: selectControl({
+        label: "Justify",
+        options: [
+          "flex-start",
+          "center",
+          "flex-end",
+          "space-between",
+          "space-around",
+        ],
+        defaultValue: "flex-start",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "responsive-spans",
+      title: "Responsive spans",
+      component: GridResponsiveSpans,
+      layout: "stretch",
+      sourceModule: "grid",
+      sourceExport: "GridResponsiveSpans",
+    },
+    {
+      id: "grow",
+      title: "Grow",
+      component: GridGrow,
+      layout: "stretch",
+      sourceModule: "grid",
+      sourceExport: "GridGrow",
+    },
+    {
+      id: "offset-and-order",
+      title: "Offset and order",
+      component: GridOffsetAndOrder,
+      layout: "stretch",
+      sourceModule: "grid",
+      sourceExport: "GridOffsetAndOrder",
+    },
+    {
+      id: "container-queries",
+      title: 'type="container"',
+      description:
+        "Columns respond to the container's width, not the viewport.",
+      component: GridContainerQueries,
+      layout: "stretch",
+      sourceModule: "grid",
+      sourceExport: "GridContainerQueries",
+    },
+  ],
+}
+
 const resizableEntry: ComponentEntry = {
   id: "resizable",
   name: "Resizable",
@@ -449,6 +550,7 @@ export const layoutEntries: readonly ComponentEntry[] = [
   aspectRatioEntry,
   carouselEntry,
   collapsibleEntry,
+  gridEntry,
   resizableEntry,
   scrollAreaEntry,
   separatorEntry,
