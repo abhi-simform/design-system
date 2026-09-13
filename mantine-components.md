@@ -8,6 +8,7 @@ Tiers are build batches, not strict sub-dependencies within a tier — items in
 the same tier can be done in any order relative to each other.
 
 ## Tier 1 — Foundational primitives
+
 Nothing below depends on these existing yet, but several later components do.
 
 1. Box - https://mantine.dev/core/box/
@@ -17,6 +18,7 @@ Nothing below depends on these existing yet, but several later components do.
 5. Overlay - https://mantine.dev/core/overlay/
 
 ## Tier 2 — Layout primitives
+
 Built on Box.
 
 6. Stack - https://mantine.dev/core/stack/
@@ -39,6 +41,7 @@ Built on Box.
 20. List - https://mantine.dev/core/list/ (depends on Text)
 
 ## Tier 4 — Standalone atoms
+
 Low/no dependencies, quick wins.
 
 21. Anchor - https://mantine.dev/core/anchor/ (depends on Text)
@@ -63,6 +66,7 @@ Low/no dependencies, quick wins.
 37. ColorInput - https://mantine.dev/core/color-input/ (depends on ColorPicker + existing Input/Popover)
 
 ## Tier 6 — Overlay composites
+
 Depend on Portal / Transition / Overlay from Tier 1.
 
 38. FloatingIndicator - https://mantine.dev/core/floating-indicator/
@@ -73,6 +77,7 @@ Depend on Portal / Transition / Overlay from Tier 1.
 43. FloatingWindow - https://mantine.dev/core/floating-window/ (depends on Portal, FocusTrap, Transition)
 
 ## Tier 7 — Pill → Combobox chain
+
 Pill first — everything else here builds on it.
 
 44. Pill - https://mantine.dev/core/pill/
@@ -92,6 +97,7 @@ Pill first — everything else here builds on it.
 55. AppShell - https://mantine.dev/core/app-shell/ (depends on Box/Group/Stack, Burger, existing ScrollArea/Sidebar patterns)
 
 ## Tier 9 — Remaining inputs
+
 Independent of each other and of everything above.
 
 56. Chip - https://mantine.dev/core/chip/

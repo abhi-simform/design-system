@@ -145,7 +145,7 @@ Don't assume — check, every time (styles drift between components):
   Reserve inline `style`/CSS custom properties for genuinely **floating
   dynamic values** that Tailwind cannot express as a static class at
   all — because the scanner only ever sees literal source text, a class
-  built at runtime (`` `gap-[${n}px]` ``, `` cn(`p-${size}`) ``) will never
+  built at runtime (`` `gap-[${n}px]` ``, ``cn(`p-${size}`)``) will never
   be generated and silently does nothing:
   - An unbounded/continuous input with no natural enum — an arbitrary color,
     an opacity, a blur radius, a z-index, a duration in ms.

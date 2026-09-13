@@ -47,11 +47,11 @@ export function FoundationTypography() {
             <div
               key={step.className}
               className={cn(
-                "flex items-baseline gap-5 px-5 py-4",
+                "flex items-center gap-5 px-5 py-4",
                 index > 0 && "border-t",
               )}
             >
-              <div className="w-28 shrink-0 font-mono text-xs text-muted-foreground">
+              <div className="w-32 shrink-0 font-mono text-xs text-muted-foreground">
                 {step.label}
                 <span className="ml-2 opacity-60">{step.size}</span>
               </div>
@@ -72,11 +72,11 @@ export function FoundationTypography() {
             <div
               key={step.className}
               className={cn(
-                "flex items-baseline gap-5 px-5 py-4",
+                "flex items-center gap-5 px-5 py-4",
                 index > 0 && "border-t",
               )}
             >
-              <div className="w-28 shrink-0 font-mono text-xs text-muted-foreground">
+              <div className="w-32 shrink-0 font-mono text-xs text-muted-foreground">
                 {step.label}
                 <span className="ml-2 opacity-60">{step.size}</span>
               </div>

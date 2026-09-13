@@ -35,7 +35,7 @@ Every documented component is described once as a `ComponentEntry` (`src/showcas
 
 - metadata (`id`, `name`, `category`, `description`, `sourcePath`, `keywords`)
 - an optional `playground` — built via `definePlayground()` (`src/showcase/registry/define-playground.ts`), which pairs a control map (`src/showcase/lib/controls.ts`: select/boolean/text/number) with a demo component and auto-generates the code snippet shown to the user
-- a list of `stories` — each a small demo component plus `sourceModule`/`sourceExport`, which `src/showcase/lib/demo-source.ts` uses to pull the *real* source text (via `import.meta.glob(..., { query: "?raw" })`) for the "Show code" disclosure, so snippets can never drift from the actual demo
+- a list of `stories` — each a small demo component plus `sourceModule`/`sourceExport`, which `src/showcase/lib/demo-source.ts` uses to pull the _real_ source text (via `import.meta.glob(..., { query: "?raw" })`) for the "Show code" disclosure, so snippets can never drift from the actual demo
 
 Demo components themselves live in `src/showcase/demos/<component>.tsx` — one file per registry entry, exporting each named story/playground component referenced from the entries file. Registry entry files must stay `.ts` data modules with no JSX (a `react-refresh/only-export-components` constraint) — always point `component:` at an imported component, never an inline closure.
 

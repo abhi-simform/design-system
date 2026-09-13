@@ -41,6 +41,27 @@ import {
   ButtonVariants,
   ButtonWithIcons,
 } from "@/showcase/demos/button"
+import {
+  CloseButtonCustomIcon,
+  CloseButtonPlayground,
+  CloseButtonSizes,
+  CloseButtonStates,
+  CloseButtonVariants,
+  CloseButtonWithLabel,
+} from "@/showcase/demos/close-button"
+import {
+  CopyButtonBasic,
+  CopyButtonCustomTimeout,
+  CopyButtonIconOnly,
+  CopyButtonPlayground,
+} from "@/showcase/demos/copy-button"
+import {
+  FileButtonBasic,
+  FileButtonDisabled,
+  FileButtonMultiple,
+  FileButtonPlayground,
+  FileButtonReset,
+} from "@/showcase/demos/file-button"
 
 const buttonEntry: ComponentEntry = {
   id: "button",
@@ -230,6 +251,216 @@ const buttonGroupEntry: ComponentEntry = {
   ],
 }
 
+const closeButtonEntry: ComponentEntry = {
+  id: "close-button",
+  name: "Close Button",
+  category: "Actions",
+  description:
+    "A small square icon button pre-loaded with an X icon, for dismissing dialogs, sheets, tags, and other overlays.",
+  sourcePath: "src/components/ui/close-button.tsx",
+  importStatement: 'import { CloseButton } from "@/components/ui/close-button"',
+  exports: ["CloseButton", "closeButtonVariants"],
+  keywords: ["close", "dismiss", "x button", "icon button", "cancel"],
+  notes: [
+    "Always pass an aria-label (or a visually hidden label as children) — the icon alone isn't an accessible name.",
+    "icon replaces the default X icon entirely; iconSize only resizes the default icon and is ignored once icon is set.",
+  ],
+  playground: definePlayground({
+    tag: "CloseButton",
+    component: CloseButtonPlayground,
+    controls: {
+      variant: selectControl({
+        label: "Variant",
+        options: ["subtle", "transparent"],
+        defaultValue: "subtle",
+      }),
+      size: selectControl({
+        label: "Size",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      disabled: booleanControl({ label: "Disabled", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "variants",
+      title: "Variants",
+      component: CloseButtonVariants,
+      sourceModule: "close-button",
+      sourceExport: "CloseButtonVariants",
+    },
+    {
+      id: "sizes",
+      title: "Sizes",
+      component: CloseButtonSizes,
+      sourceModule: "close-button",
+      sourceExport: "CloseButtonSizes",
+    },
+    {
+      id: "custom-icon",
+      title: "Custom icon",
+      description:
+        "icon swaps the icon entirely; iconSize only resizes the default X icon.",
+      component: CloseButtonCustomIcon,
+      sourceModule: "close-button",
+      sourceExport: "CloseButtonCustomIcon",
+    },
+    {
+      id: "states",
+      title: "States",
+      component: CloseButtonStates,
+      sourceModule: "close-button",
+      sourceExport: "CloseButtonStates",
+    },
+    {
+      id: "with-label",
+      title: "With a visually hidden label",
+      description:
+        "children renders alongside the icon — pair it with sr-only text when an aria-label isn't enough context.",
+      component: CloseButtonWithLabel,
+      sourceModule: "close-button",
+      sourceExport: "CloseButtonWithLabel",
+    },
+  ],
+}
+
+const copyButtonEntry: ComponentEntry = {
+  id: "copy-button",
+  name: "Copy Button",
+  category: "Actions",
+  description:
+    "A render-prop component that copies a value to the clipboard and hands back a copied flag, so any element can drive the copy interaction.",
+  sourcePath: "src/components/ui/copy-button.tsx",
+  importStatement: 'import { CopyButton } from "@/components/ui/copy-button"',
+  exports: ["CopyButton"],
+  keywords: ["clipboard", "copy", "paste", "share", "url"],
+  notes: [
+    "Renders nothing itself — style whatever children returns, e.g. a Button or an icon-only Button in a Tooltip.",
+    "timeout (ms before copied resets to false) defaults to 1000.",
+    "navigator.clipboard requires a secure context — copy silently no-ops outside one.",
+  ],
+  playground: definePlayground({
+    tag: "CopyButton",
+    component: CopyButtonPlayground,
+    controls: {
+      value: textControl({
+        label: "Value",
+        defaultValue: "https://example.com",
+      }),
+      timeout: numberControl({
+        label: "Timeout (ms)",
+        defaultValue: 1000,
+        min: 0,
+        max: 5000,
+        step: 100,
+      }),
+    },
+    snippet: (values) =>
+      `<CopyButton value="${values.value}" timeout={${values.timeout}}>\n  {({ copied, copy }) => (\n    <Button variant={copied ? "default" : "outline"} onClick={copy}>\n      {copied ? "Copied" : "Copy"}\n    </Button>\n  )}\n</CopyButton>`,
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Basic",
+      component: CopyButtonBasic,
+      sourceModule: "copy-button",
+      sourceExport: "CopyButtonBasic",
+    },
+    {
+      id: "icon-only",
+      title: "Icon only",
+      description:
+        "Pairs with Tooltip to show a Copy/Copied label, and swaps the icon on copy.",
+      component: CopyButtonIconOnly,
+      sourceModule: "copy-button",
+      sourceExport: "CopyButtonIconOnly",
+    },
+    {
+      id: "custom-timeout",
+      title: "Custom timeout",
+      description:
+        "timeout controls how long copied stays true before resetting.",
+      component: CopyButtonCustomTimeout,
+      sourceModule: "copy-button",
+      sourceExport: "CopyButtonCustomTimeout",
+    },
+  ],
+}
+
+const fileButtonEntry: ComponentEntry = {
+  id: "file-button",
+  name: "File Button",
+  category: "Actions",
+  description:
+    "A render-prop component that opens the native file picker and hands back the picked File or File[], so any element can drive the upload interaction.",
+  sourcePath: "src/components/ui/file-button.tsx",
+  importStatement: 'import { FileButton } from "@/components/ui/file-button"',
+  exports: ["FileButton"],
+  keywords: ["upload", "file input", "picker", "attachment", "browse"],
+  notes: [
+    "Renders nothing visible itself — style whatever children returns, e.g. a Button.",
+    "onChange receives File | null normally, or File[] when multiple is set.",
+    "The native input can't be controlled by React — call resetRef.current() to clear a stale selection.",
+    "disabled only gates the programmatic click that opens the picker; it is not applied to the underlying input.",
+  ],
+  playground: definePlayground({
+    tag: "FileButton",
+    component: FileButtonPlayground,
+    controls: {
+      multiple: booleanControl({ label: "Multiple", defaultValue: false }),
+      accept: textControl({
+        label: "Accept",
+        defaultValue: "",
+        placeholder: "image/png,image/jpeg",
+      }),
+      disabled: booleanControl({ label: "Disabled", defaultValue: false }),
+    },
+    snippet: (values) => {
+      const props = [
+        values.multiple ? " multiple" : "",
+        values.accept ? ` accept="${values.accept}"` : "",
+        values.disabled ? " disabled" : "",
+      ].join("")
+
+      return `<FileButton onChange={setValue}${props}>\n  {({ onClick }) => (\n    <Button onClick={onClick}${values.disabled ? " disabled" : ""}>\n      Upload file${values.multiple ? "s" : ""}\n    </Button>\n  )}\n</FileButton>`
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Basic",
+      component: FileButtonBasic,
+      sourceModule: "file-button",
+      sourceExport: "FileButtonBasic",
+    },
+    {
+      id: "multiple",
+      title: "Multiple files",
+      description: "multiple switches the payload from File | null to File[].",
+      component: FileButtonMultiple,
+      sourceModule: "file-button",
+      sourceExport: "FileButtonMultiple",
+    },
+    {
+      id: "reset",
+      title: "Resetting the selection",
+      description:
+        "resetRef.current() clears the native input's value directly, since it can't be controlled by React.",
+      component: FileButtonReset,
+      sourceModule: "file-button",
+      sourceExport: "FileButtonReset",
+    },
+    {
+      id: "disabled",
+      title: "Disabled",
+      component: FileButtonDisabled,
+      sourceModule: "file-button",
+      sourceExport: "FileButtonDisabled",
+    },
+  ],
+}
+
 const toggleEntry: ComponentEntry = {
   id: "toggle",
   name: "Toggle",
@@ -410,7 +641,10 @@ const kbdEntry: ComponentEntry = {
 export const actionsEntries: readonly ComponentEntry[] = [
   buttonEntry,
   buttonGroupEntry,
+  closeButtonEntry,
+  copyButtonEntry,
   toggleEntry,
   toggleGroupEntry,
   kbdEntry,
+  fileButtonEntry,
 ]

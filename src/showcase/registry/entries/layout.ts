@@ -18,16 +18,34 @@ import {
   AspectRatioWithContent,
 } from "@/showcase/demos/aspect-ratio"
 import {
+  BackgroundImageAsButton,
+  BackgroundImagePlayground,
+  BackgroundImageRadii,
+  BackgroundImageWithContent,
+} from "@/showcase/demos/background-image"
+import {
   BoxAsLink,
   BoxAsSection,
   BoxDefault,
   BoxPlayground,
 } from "@/showcase/demos/box"
 import {
+  CenterAsSection,
+  CenterDefault,
+  CenterInline,
+  CenterPlayground,
+} from "@/showcase/demos/center"
+import {
   CollapsibleBasic,
   CollapsibleDefaultOpen,
   CollapsiblePlayground,
 } from "@/showcase/demos/collapsible"
+import {
+  ContainerCustomSize,
+  ContainerFluid,
+  ContainerPlayground,
+  ContainerSizes,
+} from "@/showcase/demos/container"
 import {
   FlexDefault,
   FlexDirection,
@@ -51,6 +69,19 @@ import {
   GroupWrap,
 } from "@/showcase/demos/group"
 import {
+  ImageFitVariants,
+  ImagePlayground,
+  ImageRadii,
+  ImageWithFallback,
+} from "@/showcase/demos/image"
+import {
+  PaperAsSection,
+  PaperPlayground,
+  PaperRadii,
+  PaperShadows,
+  PaperWithBorder,
+} from "@/showcase/demos/paper"
+import {
   ScrollAreaHorizontal,
   ScrollAreaPlayground,
   ScrollAreaVertical,
@@ -60,6 +91,19 @@ import {
   SeparatorPlayground,
   SeparatorVertical,
 } from "@/showcase/demos/separator"
+import {
+  SimpleGridAutoFit,
+  SimpleGridContainerQueries,
+  SimpleGridIndependentSpacing,
+  SimpleGridPlayground,
+  SimpleGridResponsiveCols,
+} from "@/showcase/demos/simple-grid"
+import {
+  SpaceCustomSize,
+  SpaceHorizontal,
+  SpacePlayground,
+  SpaceVertical,
+} from "@/showcase/demos/space"
 import {
   StackAlign,
   StackAsSection,
@@ -208,6 +252,62 @@ const aspectRatioEntry: ComponentEntry = {
   ],
 }
 
+const backgroundImageEntry: ComponentEntry = {
+  id: "background-image",
+  name: "Background Image",
+  category: "Layout",
+  description:
+    "Renders an image as a CSS background so content can be layered on top of it — for hero sections and similar overlays.",
+  sourcePath: "src/components/ui/background-image.tsx",
+  importStatement:
+    'import { BackgroundImage } from "@/components/ui/background-image"',
+  exports: ["BackgroundImage"],
+  keywords: ["image", "hero", "background", "cover", "overlay", "photo"],
+  notes: [
+    'radius defaults to "none" and only covers the closed xs–xl scale — a value outside it isn\'t a prop, pass a raw utility via className instead, e.g. className="rounded-[3px]".',
+    "src always applies as an inline background-image style, since an arbitrary URL can't be expressed as a static Tailwind class.",
+    'BackgroundImage is built on Box, so it also accepts a render prop to swap the rendered element, e.g. render={<button type="button" />}.',
+  ],
+  playground: definePlayground({
+    tag: "BackgroundImage",
+    component: BackgroundImagePlayground,
+    controls: {
+      radius: selectControl({
+        label: "Radius",
+        options: ["none", "xs", "sm", "md", "lg", "xl"],
+        defaultValue: "none",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "with-content",
+      title: "With content",
+      component: BackgroundImageWithContent,
+      layout: "stretch",
+      sourceModule: "background-image",
+      sourceExport: "BackgroundImageWithContent",
+    },
+    {
+      id: "radii",
+      title: "Radius scale",
+      component: BackgroundImageRadii,
+      layout: "stretch",
+      sourceModule: "background-image",
+      sourceExport: "BackgroundImageRadii",
+    },
+    {
+      id: "as-button",
+      title: "As a button",
+      description: "BackgroundImage inherits Box's render prop.",
+      component: BackgroundImageAsButton,
+      layout: "stretch",
+      sourceModule: "background-image",
+      sourceExport: "BackgroundImageAsButton",
+    },
+  ],
+}
+
 const boxEntry: ComponentEntry = {
   id: "box",
   name: "Box",
@@ -343,6 +443,53 @@ const carouselEntry: ComponentEntry = {
   ],
 }
 
+const centerEntry: ComponentEntry = {
+  id: "center",
+  name: "Center",
+  category: "Layout",
+  description:
+    "Centers its children on both axes with flexbox. inline swaps flex for inline-flex so it can sit inline with surrounding text.",
+  sourcePath: "src/components/ui/center.tsx",
+  importStatement: 'import { Center } from "@/components/ui/center"',
+  exports: ["Center"],
+  keywords: ["layout", "flex", "align", "middle", "justify"],
+  notes: [
+    "inline switches display from flex to inline-flex — useful for centering an icon next to inline text.",
+    "Center is built on Box, so it also accepts a render prop to swap the rendered element, e.g. render={<section />}.",
+  ],
+  playground: definePlayground({
+    tag: "Center",
+    component: CenterPlayground,
+    controls: {
+      inline: booleanControl({ label: "Inline", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Default",
+      component: CenterDefault,
+      sourceModule: "center",
+      sourceExport: "CenterDefault",
+    },
+    {
+      id: "inline",
+      title: "Inline",
+      component: CenterInline,
+      sourceModule: "center",
+      sourceExport: "CenterInline",
+    },
+    {
+      id: "as-section",
+      title: "As a section",
+      description: "Center inherits Box's render prop.",
+      component: CenterAsSection,
+      sourceModule: "center",
+      sourceExport: "CenterAsSection",
+    },
+  ],
+}
+
 const collapsibleEntry: ComponentEntry = {
   id: "collapsible",
   name: "Collapsible",
@@ -383,6 +530,64 @@ const collapsibleEntry: ComponentEntry = {
       component: CollapsibleDefaultOpen,
       sourceModule: "collapsible",
       sourceExport: "CollapsibleDefaultOpen",
+    },
+  ],
+}
+
+const containerEntry: ComponentEntry = {
+  id: "container",
+  name: "Container",
+  category: "Layout",
+  description:
+    "Centers content and caps it to a fixed max-width — the same width at every screen size, not a responsive breakpoint scale.",
+  sourcePath: "src/components/ui/container.tsx",
+  importStatement: 'import { Container } from "@/components/ui/container"',
+  exports: ["Container"],
+  keywords: ["layout", "max-width", "center", "wrapper", "page", "width"],
+  notes: [
+    'size is fixed, not responsive — a Container with size="md" is 960px wide at every viewport width, unlike Grid\'s per-breakpoint props.',
+    "Pass a number instead of a preset for a one-off max-width, e.g. size={400} (converted to rem).",
+    "fluid overrides size and stretches the container to 100% of its parent's width.",
+    "Container is built on Box, so it also accepts a render prop to swap the rendered element, e.g. render={<section />}.",
+  ],
+  playground: definePlayground({
+    tag: "Container",
+    layout: "stretch",
+    component: ContainerPlayground,
+    controls: {
+      size: selectControl({
+        label: "Size",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      fluid: booleanControl({ label: "Fluid", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "sizes",
+      title: "Sizes",
+      component: ContainerSizes,
+      layout: "stretch",
+      sourceModule: "container",
+      sourceExport: "ContainerSizes",
+    },
+    {
+      id: "fluid",
+      title: "Fluid",
+      component: ContainerFluid,
+      layout: "stretch",
+      sourceModule: "container",
+      sourceExport: "ContainerFluid",
+    },
+    {
+      id: "custom-size",
+      title: "Custom size",
+      description: "A number bypasses the preset scale entirely.",
+      component: ContainerCustomSize,
+      layout: "stretch",
+      sourceModule: "container",
+      sourceExport: "ContainerCustomSize",
     },
   ],
 }
@@ -665,6 +870,148 @@ const groupEntry: ComponentEntry = {
   ],
 }
 
+const imageEntry: ComponentEntry = {
+  id: "image",
+  name: "Image",
+  category: "Layout",
+  description:
+    "A styled <img> with a closed fit/radius scale and a fallbackSrc that swaps in automatically once the real source fails to load.",
+  sourcePath: "src/components/ui/image.tsx",
+  importStatement: 'import { Image } from "@/components/ui/image"',
+  exports: ["Image"],
+  keywords: [
+    "image",
+    "photo",
+    "picture",
+    "fallback",
+    "object-fit",
+    "radius",
+    "img",
+  ],
+  notes: [
+    'fit and radius map to static Tailwind classes (object-cover…scale-down, rounded-none…xl) — a value outside either scale isn\'t a prop, pass a raw utility via className instead, e.g. className="object-[50%_25%]".',
+    "fallbackSrc swaps in once the real src fails to load; the error state resets automatically whenever the src prop itself changes, so a new src re-attempts loading even after a previous failure.",
+    'The rendered element carries data-fallback="" while showing the fallback image, for a [data-fallback] styling hook.',
+    "Skips Mantine's style-shorthand Box props (m, p, w, h, bg, …) and Styles API (classNames, styles, unstyled, vars) — use className/style instead.",
+    "Image is built directly on Base UI's render/useRender polymorphism (not Box, since Box defaults to a div) — it also accepts a render prop to swap the rendered element.",
+  ],
+  playground: definePlayground({
+    tag: "Image",
+    component: ImagePlayground,
+    controls: {
+      fit: selectControl({
+        label: "Fit",
+        options: ["cover", "contain", "fill", "none", "scale-down"],
+        defaultValue: "cover",
+      }),
+      radius: selectControl({
+        label: "Radius",
+        options: ["none", "xs", "sm", "md", "lg", "xl"],
+        defaultValue: "none",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "radii",
+      title: "Radius scale",
+      component: ImageRadii,
+      layout: "stretch",
+      sourceModule: "image",
+      sourceExport: "ImageRadii",
+    },
+    {
+      id: "fit",
+      title: "Object-fit scale",
+      component: ImageFitVariants,
+      layout: "stretch",
+      sourceModule: "image",
+      sourceExport: "ImageFitVariants",
+    },
+    {
+      id: "with-fallback",
+      title: "With fallback",
+      description: "fallbackSrc replaces src once the real image errors.",
+      component: ImageWithFallback,
+      layout: "stretch",
+      sourceModule: "image",
+      sourceExport: "ImageWithFallback",
+    },
+  ],
+}
+
+const paperEntry: ComponentEntry = {
+  id: "paper",
+  name: "Paper",
+  category: "Layout",
+  description:
+    "A basic surface with shadow, radius and an optional border — the building block cards, dropdowns and modals are built from.",
+  sourcePath: "src/components/ui/paper.tsx",
+  importStatement: 'import { Paper } from "@/components/ui/paper"',
+  exports: ["Paper"],
+  keywords: ["surface", "card", "elevation", "shadow", "border", "panel"],
+  notes: [
+    'shadow and radius map to static Tailwind classes (shadow-none…xl, rounded-xs…xl) — a value outside that scale isn\'t a prop, pass a raw utility via className instead, e.g. className="shadow-[0_0_20px_red]".',
+    "radius=\"xs\" uses Tailwind's stock rounded-xs (2px) since this repo's custom radius scale starts at sm — the other four steps derive from the repo's --radius token.",
+    'Skips Mantine\'s style-shorthand Box props (p, m, w, h, bg, …) — use className/style instead, e.g. className="p-6".',
+    "Paper is built on Box, so it also accepts a render prop to swap the rendered element, e.g. render={<section />}.",
+  ],
+  playground: definePlayground({
+    tag: "Paper",
+    component: PaperPlayground,
+    controls: {
+      shadow: selectControl({
+        label: "Shadow",
+        options: ["none", "xs", "sm", "md", "lg", "xl"],
+        defaultValue: "none",
+      }),
+      radius: selectControl({
+        label: "Radius",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "sm",
+      }),
+      withBorder: booleanControl({
+        label: "With border",
+        defaultValue: false,
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "shadows",
+      title: "Shadow scale",
+      component: PaperShadows,
+      layout: "stretch",
+      sourceModule: "paper",
+      sourceExport: "PaperShadows",
+    },
+    {
+      id: "radii",
+      title: "Radius scale",
+      component: PaperRadii,
+      layout: "stretch",
+      sourceModule: "paper",
+      sourceExport: "PaperRadii",
+    },
+    {
+      id: "with-border",
+      title: "With border",
+      component: PaperWithBorder,
+      layout: "stretch",
+      sourceModule: "paper",
+      sourceExport: "PaperWithBorder",
+    },
+    {
+      id: "as-section",
+      title: "As a section",
+      description: "Paper inherits Box's render prop.",
+      component: PaperAsSection,
+      sourceModule: "paper",
+      sourceExport: "PaperAsSection",
+    },
+  ],
+}
+
 const resizableEntry: ComponentEntry = {
   id: "resizable",
   name: "Resizable",
@@ -814,6 +1161,143 @@ const separatorEntry: ComponentEntry = {
   ],
 }
 
+const simpleGridEntry: ComponentEntry = {
+  id: "simple-grid",
+  name: "Simple Grid",
+  category: "Layout",
+  description:
+    "A responsive CSS grid — cols, spacing and verticalSpacing all accept a responsive object like { base: 1, sm: 2, lg: 4 }, or set minColWidth to auto-fill/auto-fit columns without a fixed count.",
+  sourcePath: "src/components/ui/simple-grid.tsx",
+  importStatement: 'import { SimpleGrid } from "@/components/ui/simple-grid"',
+  exports: ["SimpleGrid"],
+  keywords: [
+    "layout",
+    "grid",
+    "columns",
+    "responsive",
+    "auto-fit",
+    "auto-fill",
+    "breakpoints",
+  ],
+  notes: [
+    "Responsive props use their own base/xs/sm/md/lg/xl breakpoint scale, not Tailwind's — so cols={{ base: 1, lg: 4 }} reflows at 75em regardless of Tailwind's lg.",
+    "minColWidth makes cols inert entirely — columns are auto-filled (or auto-fit, via autoFlow) to that minimum width instead of a fixed count.",
+    'type="container" switches cols/spacing/verticalSpacing to container queries instead of viewport media queries, using the breakpoints prop (defaults to the same scale).',
+  ],
+  playground: definePlayground({
+    tag: "SimpleGrid",
+    layout: "stretch",
+    component: SimpleGridPlayground,
+    controls: {
+      cols: numberControl({
+        label: "Columns",
+        defaultValue: 2,
+        min: 1,
+        max: 6,
+      }),
+      spacing: selectControl({
+        label: "Spacing",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "responsive-cols",
+      title: "Responsive columns",
+      component: SimpleGridResponsiveCols,
+      layout: "stretch",
+      sourceModule: "simple-grid",
+      sourceExport: "SimpleGridResponsiveCols",
+    },
+    {
+      id: "independent-spacing",
+      title: "Independent row/column spacing",
+      component: SimpleGridIndependentSpacing,
+      layout: "stretch",
+      sourceModule: "simple-grid",
+      sourceExport: "SimpleGridIndependentSpacing",
+    },
+    {
+      id: "auto-fit",
+      title: "Auto-fill by minimum width",
+      description:
+        "minColWidth replaces cols entirely — no breakpoints needed.",
+      component: SimpleGridAutoFit,
+      layout: "stretch",
+      sourceModule: "simple-grid",
+      sourceExport: "SimpleGridAutoFit",
+    },
+    {
+      id: "container-queries",
+      title: 'type="container"',
+      description:
+        "Columns respond to the container's width, not the viewport.",
+      component: SimpleGridContainerQueries,
+      layout: "stretch",
+      sourceModule: "simple-grid",
+      sourceExport: "SimpleGridContainerQueries",
+    },
+  ],
+}
+
+const spaceEntry: ComponentEntry = {
+  id: "space",
+  name: "Space",
+  category: "Layout",
+  description:
+    "An empty spacer sized by w/h — drop it inside a Group or Stack to add one-off spacing the parent's own gap doesn't cover.",
+  sourcePath: "src/components/ui/space.tsx",
+  importStatement: 'import { Space } from "@/components/ui/space"',
+  exports: ["Space"],
+  keywords: ["layout", "spacer", "gap", "margin", "width", "height"],
+  notes: [
+    "miw/mih default to w/h, so a Space inside a flex row or column can't be squeezed smaller than its set size.",
+    'A number is treated as pixels (converted to rem); a spacing token (xs–xl) resolves to that scale; any other string is passed through as a raw CSS value, e.g. w="50%".',
+    "w/h take a single value, not a responsive object — unlike Grid/SimpleGrid, Space has no breakpoint scale to opt into.",
+    "Space is built on Box, so it also accepts a render prop to swap the rendered element, e.g. render={<span />}.",
+  ],
+  playground: definePlayground({
+    tag: "Space",
+    layout: "stretch",
+    component: SpacePlayground,
+    controls: {
+      w: selectControl({
+        label: "Width",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "horizontal",
+      title: "Horizontal spacer",
+      component: SpaceHorizontal,
+      layout: "stretch",
+      sourceModule: "space",
+      sourceExport: "SpaceHorizontal",
+    },
+    {
+      id: "vertical",
+      title: "Vertical spacer",
+      component: SpaceVertical,
+      sourceModule: "space",
+      sourceExport: "SpaceVertical",
+    },
+    {
+      id: "custom-size",
+      title: "Custom size",
+      description: "A number bypasses the preset scale entirely.",
+      component: SpaceCustomSize,
+      layout: "stretch",
+      sourceModule: "space",
+      sourceExport: "SpaceCustomSize",
+    },
+  ],
+}
+
 const stackEntry: ComponentEntry = {
   id: "stack",
   name: "Stack",
@@ -887,14 +1371,21 @@ const stackEntry: ComponentEntry = {
 export const layoutEntries: readonly ComponentEntry[] = [
   accordionEntry,
   aspectRatioEntry,
+  backgroundImageEntry,
   boxEntry,
   carouselEntry,
+  centerEntry,
   collapsibleEntry,
+  containerEntry,
   flexEntry,
   gridEntry,
   groupEntry,
+  imageEntry,
+  paperEntry,
   resizableEntry,
   scrollAreaEntry,
   separatorEntry,
+  simpleGridEntry,
+  spaceEntry,
   stackEntry,
 ]

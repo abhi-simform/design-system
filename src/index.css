@@ -87,6 +87,18 @@
 @theme inline {
   --font-sans: "Inter Variable", sans-serif;
   --font-heading: "DM Sans Variable", sans-serif;
+  --text-title-h1: 2.125rem;
+  --text-title-h2: 1.625rem;
+  --text-title-h3: 1.375rem;
+  --text-title-h4: 1.125rem;
+  --text-title-h5: 1rem;
+  --text-title-h6: 0.875rem;
+  --leading-title-h1: 1.3;
+  --leading-title-h2: 1.35;
+  --leading-title-h3: 1.4;
+  --leading-title-h4: 1.45;
+  --leading-title-h5: 1.5;
+  --leading-title-h6: 1.5;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -199,5 +211,236 @@
     *::-webkit-scrollbar-corner {
       background: transparent;
     }
+  }
+}
+
+@layer components {
+  .checkerboard {
+    background-image:
+      linear-gradient(45deg, var(--border) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--border) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--border) 75%),
+      linear-gradient(-45deg, var(--background) 75%, var(--border) 75%);
+    background-position:
+      0 0,
+      0 4px,
+      4px -4px,
+      -4px 0;
+    background-size: 8px 8px;
+  }
+
+  .typography {
+    --typography-spacing-xs: 0.625rem;
+    --typography-spacing-sm: 0.75rem;
+    --typography-spacing-md: 1rem;
+    --typography-spacing-lg: 1.25rem;
+    --typography-spacing-xl: 1.5rem;
+
+    & :first-child {
+      margin-top: 0;
+    }
+
+    & :last-child {
+      margin-bottom: 0;
+    }
+
+    & :where(h1, h2, h3, h4, h5, h6) {
+      margin-bottom: var(--typography-spacing-xs);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    & :where(h1) {
+      margin-top: calc(1.5 * var(--typography-spacing-xl));
+      font-size: var(--text-title-h1);
+      line-height: var(--leading-title-h1);
+    }
+
+    & :where(h2) {
+      margin-top: var(--typography-spacing-xl);
+      font-size: var(--text-title-h2);
+      line-height: var(--leading-title-h2);
+    }
+
+    & :where(h3) {
+      margin-top: calc(0.8 * var(--typography-spacing-xl));
+      font-size: var(--text-title-h3);
+      line-height: var(--leading-title-h3);
+    }
+
+    & :where(h4) {
+      margin-top: calc(0.8 * var(--typography-spacing-xl));
+      font-size: var(--text-title-h4);
+      line-height: var(--leading-title-h4);
+    }
+
+    & :where(h5) {
+      margin-top: calc(0.5 * var(--typography-spacing-xl));
+      font-size: var(--text-title-h5);
+      line-height: var(--leading-title-h5);
+    }
+
+    & :where(h6) {
+      margin-top: calc(0.5 * var(--typography-spacing-xl));
+      font-size: var(--text-title-h6);
+      line-height: var(--leading-title-h6);
+    }
+
+    & :where(p) {
+      margin-top: 0;
+      margin-bottom: var(--typography-spacing-lg);
+    }
+
+    & :where(img) {
+      max-width: 100%;
+      margin-bottom: var(--typography-spacing-xs);
+    }
+
+    & :where(a) {
+      color: inherit;
+      text-decoration-line: underline;
+      text-underline-offset: 4px;
+
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+
+    & :where(mark) {
+      border-radius: var(--radius-sm);
+      background-color: color-mix(
+        in oklch,
+        var(--color-yellow) 45%,
+        transparent
+      );
+      color: inherit;
+    }
+
+    & :where(hr) {
+      margin-top: var(--typography-spacing-md);
+      margin-bottom: var(--typography-spacing-md);
+      border: 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+    & :where(pre) {
+      margin: 0;
+      margin-top: var(--typography-spacing-md);
+      margin-bottom: var(--typography-spacing-md);
+      padding: var(--typography-spacing-xs);
+      overflow-x: auto;
+      border-radius: var(--radius-sm);
+      background-color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      line-height: 1.5;
+
+      & :where(code) {
+        padding: 0;
+        border-radius: 0;
+        background-color: transparent;
+        color: inherit;
+      }
+    }
+
+    & :where(kbd) {
+      padding: 3px 5px;
+      border: 1px solid var(--color-border);
+      border-bottom-width: 3px;
+      border-radius: var(--radius-sm);
+      background-color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    & :where(code) {
+      padding: 1px 5px;
+      border-radius: var(--radius-sm);
+      background-color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      line-height: 1.5;
+    }
+
+    & :where(ul, ol) {
+      margin-bottom: var(--typography-spacing-md);
+      padding-inline-start: var(--typography-spacing-xl);
+      list-style-position: outside;
+    }
+
+    & :where(table) {
+      width: 100%;
+      margin-bottom: var(--typography-spacing-md);
+      border-collapse: collapse;
+      caption-side: bottom;
+
+      & :where(caption) {
+        margin-top: var(--typography-spacing-xs);
+        color: var(--color-muted-foreground);
+        font-size: var(--text-sm);
+      }
+
+      & :where(th) {
+        padding: var(--typography-spacing-xs) var(--typography-spacing-sm);
+        text-align: start;
+        font-size: var(--text-sm);
+        font-weight: 700;
+      }
+
+      & :where(thead th) {
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      & :where(tfoot th) {
+        border-top: 1px solid var(--color-border);
+      }
+
+      & :where(td) {
+        padding: var(--typography-spacing-xs) var(--typography-spacing-sm);
+        border-bottom: 1px solid var(--color-border);
+        font-size: var(--text-sm);
+      }
+
+      & :where(tr:last-of-type td) {
+        border-bottom: 0;
+      }
+    }
+
+    & :where(details) {
+      margin-bottom: var(--typography-spacing-md);
+      padding: var(--typography-spacing-sm) var(--typography-spacing-md);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+
+      & :where(summary) {
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      & > :where(*:last-child) {
+        margin-bottom: 0;
+      }
+    }
+
+    & :where(blockquote) {
+      margin: var(--typography-spacing-md) 0;
+      padding: var(--typography-spacing-md) var(--typography-spacing-lg);
+      border-radius: var(--radius-sm);
+      background-color: var(--color-muted);
+      font-size: var(--text-lg);
+      line-height: 1.5;
+    }
+  }
+}
+
+@keyframes rn-roll {
+  from {
+    transform: var(--rn-roll-from);
+  }
+  to {
+    transform: var(--rn-roll-to);
   }
 }
