@@ -15,6 +15,13 @@ import {
   AlphaSliderWithHue,
 } from "@/showcase/demos/alpha-slider"
 import {
+  AngleSliderBasic,
+  AngleSliderDisabled,
+  AngleSliderFormatLabel,
+  AngleSliderMarks,
+  AngleSliderPlayground,
+} from "@/showcase/demos/angle-slider"
+import {
   CheckboxGroup,
   CheckboxPlayground,
   CheckboxStates,
@@ -980,6 +987,73 @@ const alphaSliderEntry: ComponentEntry = {
   ],
 }
 
+const angleSliderEntry: ComponentEntry = {
+  id: "angle-slider",
+  name: "Angle Slider",
+  category: "Forms",
+  description:
+    "A circular slider for picking an angle between 0 and 359 degrees by dragging around the ring or using arrow keys.",
+  sourcePath: "src/components/ui/angle-slider.tsx",
+  importStatement: 'import { AngleSlider } from "@/components/ui/angle-slider"',
+  exports: ["AngleSlider"],
+  keywords: [
+    "angle",
+    "circular",
+    "radial",
+    "rotation",
+    "degrees",
+    "dial",
+    "direction",
+  ],
+  notes: [
+    "Unlike Mantine's original (which this was ported from), classNames/styles/unstyled/vars/mod have no equivalent here — style the root, marks, label, and thumb directly via className/style, using the angle-slider/-mark/-label/-thumb data-slot attributes as hooks.",
+    "Also unlike Mantine's original, dragging and keyboard interaction are both blocked entirely while disabled — Mantine's version still attached pointer listeners and fired onScrubStart/onScrubEnd even when disabled, only skipping the value write itself.",
+    "size and thumbSize stay raw pixel numbers (default 60 / size÷5), matching Mantine's own API, rather than the xs–xl size enum used by HueSlider/AlphaSlider — this is a widget with an arbitrary diameter, not a themed control.",
+  ],
+  playground: definePlayground({
+    tag: "AngleSlider",
+    component: AngleSliderPlayground,
+    controls: {
+      withLabel: booleanControl({ label: "With label", defaultValue: true }),
+      restrictToMarks: booleanControl({
+        label: "Restrict to marks",
+        defaultValue: false,
+      }),
+      disabled: booleanControl({ label: "Disabled", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Basic",
+      component: AngleSliderBasic,
+      sourceModule: "angle-slider",
+      sourceExport: "AngleSliderBasic",
+    },
+    {
+      id: "format-label",
+      title: "Custom label format",
+      component: AngleSliderFormatLabel,
+      sourceModule: "angle-slider",
+      sourceExport: "AngleSliderFormatLabel",
+    },
+    {
+      id: "marks",
+      title: "Marks",
+      component: AngleSliderMarks,
+      sourceModule: "angle-slider",
+      sourceExport: "AngleSliderMarks",
+    },
+    {
+      id: "disabled",
+      title: "Disabled",
+      component: AngleSliderDisabled,
+      sourceModule: "angle-slider",
+      sourceExport: "AngleSliderDisabled",
+    },
+  ],
+}
+
 const sliderEntry: ComponentEntry = {
   id: "slider",
   name: "Slider",
@@ -1172,5 +1246,6 @@ export const formsEntries: readonly ComponentEntry[] = [
   sliderEntry,
   hueSliderEntry,
   alphaSliderEntry,
+  angleSliderEntry,
   calendarEntry,
 ]
