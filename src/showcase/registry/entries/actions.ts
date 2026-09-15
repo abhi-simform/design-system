@@ -7,6 +7,12 @@ import {
 import { definePlayground } from "@/showcase/registry/define-playground"
 import type { ComponentEntry } from "@/showcase/registry/types"
 import {
+  BurgerControlled,
+  BurgerCustomLineSize,
+  BurgerPlayground,
+  BurgerSizes,
+} from "@/showcase/demos/burger"
+import {
   ButtonGroupBasic,
   ButtonGroupPlayground,
   ButtonGroupStepper,
@@ -62,6 +68,61 @@ import {
   FileButtonPlayground,
   FileButtonReset,
 } from "@/showcase/demos/file-button"
+
+const burgerEntry: ComponentEntry = {
+  id: "burger",
+  name: "Burger",
+  category: "Actions",
+  description:
+    "An animated hamburger icon that morphs into an X, for toggling a nav or sidebar. Fully controlled via opened and onClick.",
+  sourcePath: "src/components/ui/burger.tsx",
+  importStatement: 'import { Burger } from "@/components/ui/burger"',
+  exports: ["Burger", "burgerVariants"],
+  keywords: ["hamburger", "menu toggle", "nav toggle", "sidebar toggle"],
+  notes: [
+    "Always pass an aria-label — the icon alone isn't an accessible name.",
+    "opened has no internal state; pair it with onClick and your own boolean state to make it interactive.",
+    "size accepts the xs–xl tokens or a raw pixel number; lineSize, transitionDuration, and transitionTimingFunction override the defaults derived from size.",
+  ],
+  playground: definePlayground({
+    tag: "Burger",
+    component: BurgerPlayground,
+    controls: {
+      size: selectControl({
+        label: "Size",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      opened: booleanControl({ label: "Opened", defaultValue: false }),
+      disabled: booleanControl({ label: "Disabled", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "sizes",
+      title: "Sizes",
+      component: BurgerSizes,
+      sourceModule: "burger",
+      sourceExport: "BurgerSizes",
+    },
+    {
+      id: "controlled",
+      title: "Controlled",
+      description:
+        "opened is fully controlled — click toggles local state that drives the X transform.",
+      component: BurgerControlled,
+      sourceModule: "burger",
+      sourceExport: "BurgerControlled",
+    },
+    {
+      id: "custom-line-size",
+      title: "Custom line size",
+      component: BurgerCustomLineSize,
+      sourceModule: "burger",
+      sourceExport: "BurgerCustomLineSize",
+    },
+  ],
+}
 
 const buttonEntry: ComponentEntry = {
   id: "button",
@@ -639,6 +700,7 @@ const kbdEntry: ComponentEntry = {
 }
 
 export const actionsEntries: readonly ComponentEntry[] = [
+  burgerEntry,
   buttonEntry,
   buttonGroupEntry,
   closeButtonEntry,

@@ -8,6 +8,13 @@ import { definePlayground } from "@/showcase/registry/define-playground"
 import { lazyDemo } from "@/showcase/registry/lazy-demo"
 import type { ComponentEntry } from "@/showcase/registry/types"
 import {
+  AlphaSliderBasic,
+  AlphaSliderDisabled,
+  AlphaSliderPlayground,
+  AlphaSliderSizes,
+  AlphaSliderWithHue,
+} from "@/showcase/demos/alpha-slider"
+import {
   CheckboxGroup,
   CheckboxPlayground,
   CheckboxStates,
@@ -25,6 +32,12 @@ import {
   FieldSets,
   FieldWithErrors,
 } from "@/showcase/demos/field"
+import {
+  HueSliderBasic,
+  HueSliderDisabled,
+  HueSliderPlayground,
+  HueSliderSizes,
+} from "@/showcase/demos/hue-slider"
 import {
   InputFile,
   InputPlayground,
@@ -844,6 +857,129 @@ const selectEntry: ComponentEntry = {
   ],
 }
 
+const hueSliderEntry: ComponentEntry = {
+  id: "hue-slider",
+  name: "Hue Slider",
+  category: "Forms",
+  description:
+    "A single-thumb slider over a 0-360 hue gradient, for picking a color's hue in a custom color picker.",
+  sourcePath: "src/components/ui/hue-slider.tsx",
+  importStatement: 'import { HueSlider } from "@/components/ui/hue-slider"',
+  exports: ["HueSlider"],
+  keywords: ["color", "hue", "hsl", "gradient", "picker", "range"],
+  notes: [
+    "Unlike Mantine's original (which this was ported from), value is controlled or uncontrolled via value/defaultValue, changes report through onValueChange/onValueCommitted, and disabled/name (with a hidden range input for forms) all come from the shared Slider primitive for free.",
+    "min/max are fixed at 0/360 and orientation is fixed horizontal — this is a hue slider, not a general-purpose Slider.",
+    "The thumb's fill color previews the currently selected hue live, in both controlled and uncontrolled use.",
+  ],
+  playground: definePlayground({
+    tag: "HueSlider",
+    layout: "stretch",
+    component: HueSliderPlayground,
+    controls: {
+      size: selectControl({
+        label: "Size",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      disabled: booleanControl({ label: "Disabled", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Basic",
+      component: HueSliderBasic,
+      sourceModule: "hue-slider",
+      sourceExport: "HueSliderBasic",
+    },
+    {
+      id: "sizes",
+      title: "Sizes",
+      component: HueSliderSizes,
+      layout: "stack",
+      sourceModule: "hue-slider",
+      sourceExport: "HueSliderSizes",
+    },
+    {
+      id: "disabled",
+      title: "Disabled",
+      component: HueSliderDisabled,
+      sourceModule: "hue-slider",
+      sourceExport: "HueSliderDisabled",
+    },
+  ],
+}
+
+const alphaSliderEntry: ComponentEntry = {
+  id: "alpha-slider",
+  name: "Alpha Slider",
+  category: "Forms",
+  description:
+    "A single-thumb slider over a checkered-to-opaque gradient of a given color, for picking that color's alpha (transparency) in a custom color picker.",
+  sourcePath: "src/components/ui/alpha-slider.tsx",
+  importStatement: 'import { AlphaSlider } from "@/components/ui/alpha-slider"',
+  exports: ["AlphaSlider"],
+  keywords: [
+    "color",
+    "alpha",
+    "opacity",
+    "transparency",
+    "gradient",
+    "picker",
+    "range",
+  ],
+  notes: [
+    "Unlike Mantine's original (which this was ported from), value is controlled or uncontrolled via value/defaultValue, changes report through onValueChange/onValueCommitted, and disabled/name (with a hidden range input for forms) all come from the shared Slider primitive for free — full keyboard support (arrows, Home/End, Page Up/Down) and RTL come from the same primitive, where Mantine's original only handled arrow keys and wasn't RTL-aware.",
+    "min/max are fixed at 0/1 and orientation is fixed horizontal — this is an alpha slider, not a general-purpose Slider. step/largeStep default to 0.01/0.1 so the 0-1 range snaps sensibly; Mantine's original instead let the drag value float freely and rounded to 2 decimals only when reporting it.",
+    "color is the opaque color used as the gradient's endpoint — the thumb itself has no fill color, matching Mantine's original.",
+  ],
+  playground: definePlayground({
+    tag: "AlphaSlider",
+    layout: "stretch",
+    component: AlphaSliderPlayground,
+    controls: {
+      size: selectControl({
+        label: "Size",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      disabled: booleanControl({ label: "Disabled", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Basic",
+      component: AlphaSliderBasic,
+      sourceModule: "alpha-slider",
+      sourceExport: "AlphaSliderBasic",
+    },
+    {
+      id: "sizes",
+      title: "Sizes",
+      component: AlphaSliderSizes,
+      layout: "stack",
+      sourceModule: "alpha-slider",
+      sourceExport: "AlphaSliderSizes",
+    },
+    {
+      id: "disabled",
+      title: "Disabled",
+      component: AlphaSliderDisabled,
+      sourceModule: "alpha-slider",
+      sourceExport: "AlphaSliderDisabled",
+    },
+    {
+      id: "with-hue",
+      title: "With Hue Slider",
+      component: AlphaSliderWithHue,
+      sourceModule: "alpha-slider",
+      sourceExport: "AlphaSliderWithHue",
+    },
+  ],
+}
+
 const sliderEntry: ComponentEntry = {
   id: "slider",
   name: "Slider",
@@ -1034,5 +1170,7 @@ export const formsEntries: readonly ComponentEntry[] = [
   radioGroupEntry,
   switchEntry,
   sliderEntry,
+  hueSliderEntry,
+  alphaSliderEntry,
   calendarEntry,
 ]
