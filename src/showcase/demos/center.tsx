@@ -24,7 +24,7 @@ function DemoCell({
 
 export function CenterPlayground({ inline }: { inline: boolean }) {
   return (
-    <p className="rounded-lg border p-4">
+    <div className="rounded-lg border p-4">
       Some text{" "}
       <Center
         inline={inline}
@@ -36,7 +36,7 @@ export function CenterPlayground({ inline }: { inline: boolean }) {
         <DemoCell>Centered content</DemoCell>
       </Center>{" "}
       more text after
-    </p>
+    </div>
   )
 }
 
@@ -52,7 +52,7 @@ export function CenterInline() {
   return (
     <p className="max-w-xs rounded-lg border p-4 text-sm">
       Rate this:{" "}
-      <Center inline className="gap-1 align-middle">
+      <Center inline render={<span />} className="gap-1 align-middle">
         <StarIcon className="size-4 fill-current" />
         <span className="font-medium">4.5</span>
       </Center>{" "}

@@ -67,11 +67,9 @@ export function PortalCustomTarget() {
           </Portal>
         )}
       </div>
-      <div
-        ref={setContainer}
-        className="min-h-16 rounded-md border-2 border-dashed border-primary/60 p-4 text-xs text-muted-foreground"
-      >
+      <div className="rounded-md border-2 border-dashed border-primary/60 p-4 text-xs text-muted-foreground">
         target container
+        <div ref={setContainer} />
       </div>
     </div>
   )

@@ -16,6 +16,7 @@ export function CollapsiblePlayground({
 }) {
   return (
     <Collapsible
+      key={String(defaultOpen)}
       defaultOpen={defaultOpen}
       disabled={disabled}
       className="flex w-full max-w-sm flex-col gap-2"

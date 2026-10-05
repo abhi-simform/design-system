@@ -89,7 +89,9 @@ export function ContextMenuWithSelection() {
     <ContextMenu>
       <ContextMenuTrigger render={<Target label="Checkboxes and radios" />} />
       <ContextMenuContent className="w-56">
-        <ContextMenuLabel>Appearance</ContextMenuLabel>
+        <ContextMenuGroup>
+          <ContextMenuLabel>Appearance</ContextMenuLabel>
+        </ContextMenuGroup>
         <ContextMenuCheckboxItem
           checked={bookmarks}
           onCheckedChange={setBookmarks}
@@ -100,13 +102,17 @@ export function ContextMenuWithSelection() {
           Show full URLs
         </ContextMenuCheckboxItem>
         <ContextMenuSeparator />
-        <ContextMenuLabel>People</ContextMenuLabel>
-        <ContextMenuRadioGroup value={person} onValueChange={setPerson}>
-          <ContextMenuRadioItem value="ada">Ada Lovelace</ContextMenuRadioItem>
-          <ContextMenuRadioItem value="grace">
-            Grace Hopper
-          </ContextMenuRadioItem>
-        </ContextMenuRadioGroup>
+        <ContextMenuGroup>
+          <ContextMenuLabel>People</ContextMenuLabel>
+          <ContextMenuRadioGroup value={person} onValueChange={setPerson}>
+            <ContextMenuRadioItem value="ada">
+              Ada Lovelace
+            </ContextMenuRadioItem>
+            <ContextMenuRadioItem value="grace">
+              Grace Hopper
+            </ContextMenuRadioItem>
+          </ContextMenuRadioGroup>
+        </ContextMenuGroup>
       </ContextMenuContent>
     </ContextMenu>
   )

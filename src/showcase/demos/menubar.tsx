@@ -5,6 +5,7 @@ import {
   MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
+  MenubarGroup,
   MenubarLabel,
   MenubarMenu,
   MenubarRadioGroup,
@@ -114,11 +115,13 @@ export function MenubarBasic() {
       <MenubarMenu>
         <MenubarTrigger>Profiles</MenubarTrigger>
         <MenubarContent>
-          <MenubarLabel>Switch profile</MenubarLabel>
-          <MenubarRadioGroup value={profile} onValueChange={setProfile}>
-            <MenubarRadioItem value="ada">Ada Lovelace</MenubarRadioItem>
-            <MenubarRadioItem value="grace">Grace Hopper</MenubarRadioItem>
-          </MenubarRadioGroup>
+          <MenubarGroup>
+            <MenubarLabel>Switch profile</MenubarLabel>
+            <MenubarRadioGroup value={profile} onValueChange={setProfile}>
+              <MenubarRadioItem value="ada">Ada Lovelace</MenubarRadioItem>
+              <MenubarRadioItem value="grace">Grace Hopper</MenubarRadioItem>
+            </MenubarRadioGroup>
+          </MenubarGroup>
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
