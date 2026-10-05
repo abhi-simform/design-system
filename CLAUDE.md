@@ -9,7 +9,7 @@ A React 19 + TypeScript + Vite + Tailwind v4 component library based on shadcn/u
 ## Commands
 
 ```bash
-npm run dev            # start the showcase at localhost:5173
+npm run dev            # start the showcase at localhost:5176
 npm run build           # tsc -b && vite build (type-checks as part of build)
 npm run typecheck       # tsc --noEmit only
 npm run lint            # eslint .

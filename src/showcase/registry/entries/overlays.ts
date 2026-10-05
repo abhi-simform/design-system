@@ -7,6 +7,16 @@ import {
 import { definePlayground } from "@/showcase/registry/define-playground"
 import type { ComponentEntry } from "@/showcase/registry/types"
 import {
+  ActionBarBasic,
+  ActionBarEscapeToClose,
+  ActionBarPlayground,
+} from "@/showcase/demos/action-bar"
+import {
+  AffixBasic,
+  AffixCorners,
+  AffixPlayground,
+} from "@/showcase/demos/affix"
+import {
   AlertDialogBasic,
   AlertDialogDestructive,
   AlertDialogPlayground,
@@ -31,11 +41,22 @@ import {
   DrawerWithSnapPoints,
 } from "@/showcase/demos/drawer"
 import {
+  FloatingWindowBasic,
+  FloatingWindowPlayground,
+  FloatingWindowResizable,
+} from "@/showcase/demos/floating-window"
+import {
   HoverCardBasic,
   HoverCardInProse,
   HoverCardPlayground,
   HoverCardSides,
 } from "@/showcase/demos/hover-card"
+import {
+  LoadingOverlayAsyncAction,
+  LoadingOverlayBasic,
+  LoadingOverlayCustomAppearance,
+  LoadingOverlayPlayground,
+} from "@/showcase/demos/loading-overlay"
 import {
   OverlayBasic,
   OverlayBlur,
@@ -68,6 +89,166 @@ import {
 
 const SIDE_OPTIONS = ["top", "right", "bottom", "left"] as const
 const ALIGN_OPTIONS = ["start", "center", "end"] as const
+
+const actionBarEntry: ComponentEntry = {
+  id: "action-bar",
+  name: "ActionBar",
+  category: "Overlays",
+  description:
+    "A fixed-position bottom bar for bulk selection actions, built on Affix, Transition, and Paper.",
+  sourcePath: "src/components/ui/action-bar.tsx",
+  importStatement: 'import { ActionBar } from "@/components/ui/action-bar"',
+  exports: ["ActionBar"],
+  keywords: [
+    "bulk actions",
+    "selection toolbar",
+    "contextual bar",
+    "action bar",
+  ],
+  notes: [
+    "opened is fully controlled — drive it from selection state (opened={selection.length > 0}) rather than a self-managed open flag.",
+    "ActionBar.Divider and ActionBar.CloseButton only work inside an ActionBar; CloseButton also calls onClose after any onClick you pass it.",
+    "withinPortal defaults to true; the demos here set it to false so the fixed bar stays trapped inside its bounded preview box instead of covering the whole page.",
+  ],
+  playground: definePlayground({
+    tag: "ActionBar",
+    layout: "stretch",
+    component: ActionBarPlayground,
+    snippet: (values) => {
+      const attrs = [
+        "opened={selection.length > 0}",
+        "onClose={() => setSelection([])}",
+      ]
+      if (values.closeOnEscape) attrs.push("closeOnEscape")
+      if (!values.withBorder) attrs.push("withBorder={false}")
+      if (values.shadow !== "none") attrs.push(`shadow="${values.shadow}"`)
+
+      return [
+        "<ActionBar",
+        ...attrs.map((attr) => `  ${attr}`),
+        ">",
+        '  <Text size="sm">{selection.length} selected</Text>',
+        "  <ActionBar.Divider />",
+        '  <Button variant="ghost" size="sm">',
+        "    Archive",
+        "  </Button>",
+        '  <Button variant="destructive" size="sm">',
+        "    Delete",
+        "  </Button>",
+        '  <ActionBar.CloseButton aria-label="Clear selection" />',
+        "</ActionBar>",
+      ].join("\n")
+    },
+    controls: {
+      closeOnEscape: booleanControl({
+        label: "Close on Escape",
+        defaultValue: false,
+      }),
+      withBorder: booleanControl({
+        label: "With border",
+        defaultValue: true,
+      }),
+      shadow: selectControl({
+        label: "Shadow",
+        options: ["none", "xs", "sm", "md", "lg", "xl"] as const,
+        defaultValue: "none",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Bulk selection",
+      description:
+        "The bar opens once a row is selected and closes itself when the selection is cleared.",
+      layout: "stretch",
+      component: ActionBarBasic,
+      sourceModule: "action-bar",
+      sourceExport: "ActionBarBasic",
+    },
+    {
+      id: "escape-to-close",
+      title: "Close on Escape",
+      description:
+        "closeOnEscape wires a window-level Escape listener that calls onClose, same as ActionBar.CloseButton.",
+      layout: "stretch",
+      component: ActionBarEscapeToClose,
+      sourceModule: "action-bar",
+      sourceExport: "ActionBarEscapeToClose",
+    },
+  ],
+}
+
+const affixEntry: ComponentEntry = {
+  id: "affix",
+  name: "Affix",
+  category: "Overlays",
+  description:
+    "A fixed-position wrapper, portaled by default, for floating UI like a scroll-to-top button — positioned by a spacing-scale corner offset.",
+  sourcePath: "src/components/ui/affix.tsx",
+  importStatement: 'import { Affix } from "@/components/ui/affix"',
+  exports: ["Affix"],
+  keywords: ["fixed", "floating", "sticky", "scroll to top", "pinned"],
+  notes: [
+    "Pair it with Transition to animate the affixed content in and out, as the scroll-to-top story does.",
+    "position accepts the xs–xl spacing scale, a number of pixels, or any raw CSS length — sides left unset stay unpositioned.",
+    "withinPortal defaults to true; every demo here sets it to false so the fixed element stays trapped inside its bounded preview box instead of covering the whole page.",
+  ],
+  playground: definePlayground({
+    tag: "Affix",
+    layout: "stretch",
+    component: AffixPlayground,
+    snippet: (values) => {
+      const [vertical, horizontal] = values.position.split("-")
+      return [
+        "<Affix",
+        `  position={{ ${vertical}: ${values.spacing}, ${horizontal}: ${values.spacing} }}`,
+        ">",
+        '  <Button size="sm">Affixed</Button>',
+        "</Affix>",
+      ].join("\n")
+    },
+    controls: {
+      position: selectControl({
+        label: "Position",
+        options: [
+          "bottom-right",
+          "bottom-left",
+          "top-right",
+          "top-left",
+        ] as const,
+        defaultValue: "bottom-right",
+      }),
+      spacing: numberControl({
+        label: "Spacing (px)",
+        defaultValue: 16,
+        min: 0,
+        max: 48,
+        step: 4,
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "scroll-to-top",
+      title: "Scroll to top",
+      description:
+        "Affix pins the button to the corner; Transition animates it in once the panel scrolls.",
+      layout: "stretch",
+      component: AffixBasic,
+      sourceModule: "affix",
+      sourceExport: "AffixBasic",
+    },
+    {
+      id: "corners",
+      title: "Corner positions",
+      layout: "stretch",
+      component: AffixCorners,
+      sourceModule: "affix",
+      sourceExport: "AffixCorners",
+    },
+  ],
+}
 
 const dialogEntry: ComponentEntry = {
   id: "dialog",
@@ -331,6 +512,93 @@ const drawerEntry: ComponentEntry = {
   ],
 }
 
+const floatingWindowEntry: ComponentEntry = {
+  id: "floating-window",
+  name: "FloatingWindow",
+  category: "Overlays",
+  description:
+    "A draggable, optionally resizable panel with a fixed position — portaled by default, built on Paper and Portal.",
+  sourcePath: "src/components/ui/floating-window.tsx",
+  importStatement:
+    'import { FloatingWindow } from "@/components/ui/floating-window"',
+  exports: ["FloatingWindow"],
+  keywords: [
+    "draggable",
+    "resizable",
+    "movable panel",
+    "floating panel",
+    "picture-in-picture",
+  ],
+  notes: [
+    "Dragging works from anywhere on the root element unless dragHandleSelector names a descendant selector, like the header in the resizable story.",
+    "dimensions enables resizing: pair it with FloatingWindow.ResizeHandle, which also supports Arrow/Home/End keys once focused.",
+    "withinPortal defaults to true, so the window portals to document.body and is fixed relative to the real page — the demos here stay closed until you press their trigger button so they don't cover the docs while you read.",
+  ],
+  playground: definePlayground({
+    tag: "FloatingWindow",
+    layout: "stretch",
+    component: FloatingWindowPlayground,
+    snippet: (values) => {
+      const attrs = ["initialPosition={{ top: 96, left: 96 }}"]
+      if (!values.withBorder) attrs.push("withBorder={false}")
+      else attrs.push("withBorder")
+      if (values.shadow !== "none") attrs.push(`shadow="${values.shadow}"`)
+      if (!values.constrainToViewport) attrs.push("constrainToViewport={false}")
+      if (values.axis !== "both") attrs.push(`axis="${values.axis}"`)
+
+      return [
+        "<FloatingWindow",
+        ...attrs.map((attr) => `  ${attr}`),
+        ">",
+        "  Drag me around",
+        "</FloatingWindow>",
+      ].join("\n")
+    },
+    controls: {
+      withBorder: booleanControl({
+        label: "With border",
+        defaultValue: true,
+      }),
+      shadow: selectControl({
+        label: "Shadow",
+        options: ["none", "xs", "sm", "md", "lg", "xl"] as const,
+        defaultValue: "sm",
+      }),
+      constrainToViewport: booleanControl({
+        label: "Constrain to viewport",
+        defaultValue: true,
+      }),
+      axis: selectControl({
+        label: "Drag axis",
+        options: ["both", "x", "y"] as const,
+        defaultValue: "both",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Drag anywhere",
+      description:
+        "Without dragHandleSelector, the entire root element is the drag target.",
+      layout: "stretch",
+      component: FloatingWindowBasic,
+      sourceModule: "floating-window",
+      sourceExport: "FloatingWindowBasic",
+    },
+    {
+      id: "resizable",
+      title: "Drag handle and resize handle",
+      description:
+        "dragHandleSelector restricts dragging to the header; FloatingWindow.ResizeHandle adds pointer and keyboard resizing.",
+      layout: "stretch",
+      component: FloatingWindowResizable,
+      sourceModule: "floating-window",
+      sourceExport: "FloatingWindowResizable",
+    },
+  ],
+}
+
 const overlayEntry: ComponentEntry = {
   id: "overlay",
   name: "Overlay",
@@ -417,6 +685,82 @@ const overlayEntry: ComponentEntry = {
       component: OverlayFixed,
       sourceModule: "overlay",
       sourceExport: "OverlayFixed",
+    },
+  ],
+}
+
+const loadingOverlayEntry: ComponentEntry = {
+  id: "loading-overlay",
+  name: "Loading Overlay",
+  category: "Overlays",
+  description:
+    "A visible-controlled overlay plus centered spinner for a whole section — built on Overlay and Transition, not tied to any open/close context of its own.",
+  sourcePath: "src/components/ui/loading-overlay.tsx",
+  importStatement:
+    'import { LoadingOverlay } from "@/components/ui/loading-overlay"',
+  exports: ["LoadingOverlay"],
+  keywords: ["spinner", "busy", "fetching", "async", "overlay", "loader"],
+  notes: [
+    "The nearest positioned ancestor needs position: relative (or similar) — LoadingOverlay itself is absolutely positioned to fill it.",
+    "visible is fully controlled — drive it from request/pending state rather than a self-managed open flag.",
+    "loaderProps forwards to the Spinner rendered as the indicator (e.g. className for size/color); overlayProps forwards to the underlying Overlay (blur, radius, color, backgroundOpacity).",
+    "The overlay's default color is var(--background), so it already matches light/dark automatically without swapping colors yourself.",
+    "transitionProps.duration defaults to 0 (an instant toggle), matching the upstream default — pass a duration to fade it in and out.",
+  ],
+  playground: definePlayground({
+    tag: "LoadingOverlay",
+    layout: "stretch",
+    component: LoadingOverlayPlayground,
+    snippet: (values) => {
+      const attrs = [`visible={${values.visible}}`]
+      if (values.blur > 0) {
+        attrs.push(`overlayProps={{ blur: ${values.blur} }}`)
+      }
+      return ["<LoadingOverlay", ...attrs.map((a) => `  ${a}`), "/>"].join("\n")
+    },
+    controls: {
+      visible: booleanControl({
+        label: "Visible",
+        defaultValue: true,
+        omitWhenDefault: false,
+      }),
+      blur: numberControl({
+        label: "Overlay blur (px)",
+        defaultValue: 0,
+        min: 0,
+        max: 10,
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Basic",
+      description: "A manual toggle over a section of content.",
+      layout: "stretch",
+      component: LoadingOverlayBasic,
+      sourceModule: "loading-overlay",
+      sourceExport: "LoadingOverlayBasic",
+    },
+    {
+      id: "async-action",
+      title: "Async action",
+      description:
+        "visible follows a pending flag, the way it would around a real request.",
+      layout: "stretch",
+      component: LoadingOverlayAsyncAction,
+      sourceModule: "loading-overlay",
+      sourceExport: "LoadingOverlayAsyncAction",
+    },
+    {
+      id: "custom-appearance",
+      title: "Custom appearance",
+      description:
+        "overlayProps and loaderProps reach the underlying Overlay and Spinner.",
+      layout: "stretch",
+      component: LoadingOverlayCustomAppearance,
+      sourceModule: "loading-overlay",
+      sourceExport: "LoadingOverlayCustomAppearance",
     },
   ],
 }
@@ -783,11 +1127,15 @@ const toastEntry: ComponentEntry = {
 }
 
 export const overlaysEntries: readonly ComponentEntry[] = [
+  actionBarEntry,
+  affixEntry,
   dialogEntry,
   alertDialogEntry,
   sheetEntry,
   drawerEntry,
+  floatingWindowEntry,
   overlayEntry,
+  loadingOverlayEntry,
   popoverEntry,
   tooltipEntry,
   hoverCardEntry,

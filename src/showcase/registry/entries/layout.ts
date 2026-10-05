@@ -110,6 +110,24 @@ import {
   StackDefault,
   StackPlayground,
 } from "@/showcase/demos/stack"
+import {
+  SpoilerControlled,
+  SpoilerControlRef,
+  SpoilerCustomLabels,
+  SpoilerDefault,
+  SpoilerPlayground,
+  SpoilerShortContent,
+  SpoilerTransitions,
+} from "@/showcase/demos/spoiler"
+import {
+  AppShellAltLayout,
+  AppShellAnatomy,
+  AppShellCollapse,
+  AppShellDisabled,
+  AppShellFullShell,
+  AppShellPlayground,
+  AppShellResponsiveSizes,
+} from "@/showcase/demos/app-shell"
 
 // Deferred so their third-party dependency stays out of the initial bundle.
 const CarouselBasic = lazyDemo(
@@ -1368,6 +1386,260 @@ const stackEntry: ComponentEntry = {
   ],
 }
 
+const spoilerEntry: ComponentEntry = {
+  id: "spoiler",
+  name: "Spoiler",
+  category: "Layout",
+  description:
+    "Collapses tall content to a maximum height and shows a toggle to reveal the rest. The control only appears when the content actually overflows, and the height change is animated.",
+  sourcePath: "src/components/ui/spoiler.tsx",
+  importStatement: 'import { Spoiler } from "@/components/ui/spoiler"',
+  exports: ["Spoiler"],
+  keywords: [
+    "collapse",
+    "expand",
+    "show more",
+    "read more",
+    "truncate",
+    "clamp",
+  ],
+  notes: [
+    "Content height is measured with a ResizeObserver, so the control appears or disappears as content changes size.",
+    "The control is absolutely positioned below the content; the root reserves 24px of bottom margin while it is shown.",
+    "Controlled via expanded + onExpandedChange; uncontrolled via defaultExpanded.",
+    "Pass null for showLabel or hideLabel to suppress the control in that state.",
+    "transitionDuration of 0 disables animation; prefers-reduced-motion also disables it.",
+    "Skipped global styling props: classNames, styles, unstyled, vars, attributes, mod and style shorthands. Use className and style instead.",
+  ],
+  playground: definePlayground({
+    tag: "Spoiler",
+    layout: "stretch",
+    component: SpoilerPlayground,
+    controls: {
+      maxHeight: numberControl({
+        label: "Max height",
+        defaultValue: 100,
+        min: 20,
+        max: 400,
+        step: 10,
+      }),
+      transitionDuration: numberControl({
+        label: "Transition duration (ms)",
+        defaultValue: 200,
+        min: 0,
+        max: 2000,
+        step: 50,
+      }),
+      paragraphs: numberControl({
+        label: "Paragraphs",
+        defaultValue: 3,
+        min: 1,
+        max: 6,
+        step: 1,
+        codeRole: "none",
+      }),
+      defaultExpanded: booleanControl({
+        label: "Default expanded",
+        defaultValue: false,
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Default",
+      component: SpoilerDefault,
+      layout: "stretch",
+      sourceModule: "spoiler",
+      sourceExport: "SpoilerDefault",
+    },
+    {
+      id: "short-content",
+      title: "Content shorter than maxHeight",
+      component: SpoilerShortContent,
+      layout: "stretch",
+      sourceModule: "spoiler",
+      sourceExport: "SpoilerShortContent",
+    },
+    {
+      id: "controlled",
+      title: "Controlled",
+      component: SpoilerControlled,
+      layout: "stretch",
+      sourceModule: "spoiler",
+      sourceExport: "SpoilerControlled",
+    },
+    {
+      id: "transitions",
+      title: "Transition duration",
+      component: SpoilerTransitions,
+      layout: "stretch",
+      sourceModule: "spoiler",
+      sourceExport: "SpoilerTransitions",
+    },
+    {
+      id: "custom-labels",
+      title: "Custom labels and aria labels",
+      component: SpoilerCustomLabels,
+      layout: "stretch",
+      sourceModule: "spoiler",
+      sourceExport: "SpoilerCustomLabels",
+    },
+    {
+      id: "control-ref",
+      title: "Control ref",
+      component: SpoilerControlRef,
+      layout: "stretch",
+      sourceModule: "spoiler",
+      sourceExport: "SpoilerControlRef",
+    },
+  ],
+}
+
+const appShellEntry: ComponentEntry = {
+  id: "app-shell",
+  name: "App Shell",
+  category: "Layout",
+  description:
+    "A responsive application layout with a header, navbar, aside, footer and main area. Section sizes, breakpoints, collapsed state and padding drive CSS variables that every part reads, so the layout reflows without JavaScript measurement.",
+  sourcePath: "src/components/ui/app-shell.tsx",
+  importStatement: 'import { AppShell } from "@/components/ui/app-shell"',
+  exports: [
+    "AppShell",
+    "AppShellHeader",
+    "AppShellNavbar",
+    "AppShellAside",
+    "AppShellFooter",
+    "AppShellMain",
+    "AppShellSection",
+  ],
+  keywords: [
+    "layout",
+    "shell",
+    "header",
+    "navbar",
+    "sidebar",
+    "aside",
+    "footer",
+    "dashboard",
+    "responsive",
+  ],
+  notes: [
+    'Default mode="fixed" pins header, navbar, aside and footer to the viewport, so it must own the document. Examples on this page use mode="static", which lays the parts out in a grid inside a bounded container; the last story embeds the real fixed shell in an iframe.',
+    "navbar and aside collapse at their breakpoint: collapsed.mobile hides them below it (they slide off-canvas), collapsed.desktop hides them at and above it. header and footer take a single collapsed boolean.",
+    "width, height and padding accept a number (pixels), a string with units, or a { base, xs, sm, md, lg, xl } object that is emitted as min-width media queries.",
+    "Use AppShell.Section with grow inside the navbar or aside to build a scrollable middle region with fixed top and bottom sections.",
+    "Not ported: resizable sections (the resize controller), scrollbar offset compensation (offsetScrollbars), and the global styling props (classNames, styles, unstyled, vars, attributes, mod, style shorthands). Use className and style instead.",
+  ],
+  playground: definePlayground({
+    tag: "AppShell",
+    layout: "stretch",
+    component: AppShellPlayground,
+    controls: {
+      layout: selectControl({
+        label: "Layout",
+        options: ["default", "alt"],
+        defaultValue: "default",
+      }),
+      withBorder: booleanControl({ label: "With border", defaultValue: true }),
+      padding: selectControl({
+        label: "Padding",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "md",
+      }),
+      headerHeight: numberControl({
+        label: "Header height",
+        defaultValue: 56,
+        min: 32,
+        max: 96,
+        codeRole: "none",
+      }),
+      navbarWidth: numberControl({
+        label: "Navbar width",
+        defaultValue: 200,
+        min: 120,
+        max: 320,
+        codeRole: "none",
+      }),
+      asideWidth: numberControl({
+        label: "Aside width (0 hides)",
+        defaultValue: 0,
+        min: 0,
+        max: 280,
+        codeRole: "none",
+      }),
+      withFooter: booleanControl({
+        label: "Footer",
+        defaultValue: false,
+        codeRole: "none",
+      }),
+      disabled: booleanControl({ label: "Disabled", defaultValue: false }),
+    },
+  }),
+  stories: [
+    {
+      id: "anatomy",
+      title: "Anatomy",
+      description:
+        "All five parts, with AppShell.Section dividing the navbar into a fixed header, a scrollable middle and a fixed footer.",
+      component: AppShellAnatomy,
+      layout: "stretch",
+      sourceModule: "app-shell",
+      sourceExport: "AppShellAnatomy",
+    },
+    {
+      id: "alt-layout",
+      title: "Alt layout",
+      description:
+        'layout="alt" gives the navbar the full height and places the header and footer beside it.',
+      component: AppShellAltLayout,
+      layout: "stretch",
+      sourceModule: "app-shell",
+      sourceExport: "AppShellAltLayout",
+    },
+    {
+      id: "collapse",
+      title: "Collapsed state",
+      description:
+        "Toggling collapsed slides the section out and animates the main padding to match, using transitionDuration and transitionTimingFunction.",
+      component: AppShellCollapse,
+      layout: "stretch",
+      sourceModule: "app-shell",
+      sourceExport: "AppShellCollapse",
+    },
+    {
+      id: "responsive-sizes",
+      title: "Responsive sizes",
+      description:
+        "Object syntax for height, width and padding. Resize the browser window to see the steps.",
+      component: AppShellResponsiveSizes,
+      layout: "stretch",
+      sourceModule: "app-shell",
+      sourceExport: "AppShellResponsiveSizes",
+    },
+    {
+      id: "disabled",
+      title: "Disabled",
+      description:
+        "disabled hides the header, navbar, aside and footer and drops their offsets, leaving only Main.",
+      component: AppShellDisabled,
+      layout: "stretch",
+      sourceModule: "app-shell",
+      sourceExport: "AppShellDisabled",
+    },
+    {
+      id: "full-shell",
+      title: "The real fixed shell",
+      description:
+        "Rendered in an iframe at #/sandbox/app-shell so fixed positioning works against a document of its own. Narrow the frame below 768px to see the navbar collapse behind the burger.",
+      component: AppShellFullShell,
+      layout: "stretch",
+      sourceModule: "app-shell",
+      sourceExport: "AppShellSandbox",
+    },
+  ],
+}
+
 export const layoutEntries: readonly ComponentEntry[] = [
   accordionEntry,
   aspectRatioEntry,
@@ -1388,4 +1660,6 @@ export const layoutEntries: readonly ComponentEntry[] = [
   simpleGridEntry,
   spaceEntry,
   stackEntry,
+  spoilerEntry,
+  appShellEntry,
 ]

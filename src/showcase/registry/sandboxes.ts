@@ -1,5 +1,6 @@
 import type * as React from "react"
 
+import { AppShellSandbox } from "@/showcase/demos/app-shell"
 import { SidebarSandbox } from "@/showcase/demos/sidebar"
 
 export type SandboxDemo = {
@@ -14,5 +15,6 @@ export type SandboxDemo = {
  * showcase shell. The component page embeds the route in an iframe.
  */
 export const sandboxDemos: readonly SandboxDemo[] = [
+  { id: "app-shell", component: AppShellSandbox },
   { id: "sidebar", component: SidebarSandbox },
 ]

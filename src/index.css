@@ -444,3 +444,38 @@
     transform: var(--rn-roll-to);
   }
 }
+
+@theme inline {
+  --animate-marquee-horizontal: marquee-horizontal
+    var(--marquee-duration, 100000ms) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--marquee-duration, 100000ms)
+    linear infinite;
+
+  @keyframes marquee-horizontal {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(
+        calc(
+          -100% / var(--marquee-repeat) - var(--marquee-gap) /
+            var(--marquee-repeat)
+        )
+      );
+    }
+  }
+
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(
+        calc(
+          -100% / var(--marquee-repeat) - var(--marquee-gap) /
+            var(--marquee-repeat)
+        )
+      );
+    }
+  }
+}

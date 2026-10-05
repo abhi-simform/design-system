@@ -172,6 +172,42 @@ import {
   TypographyPlayground,
   TypographyTable,
 } from "@/showcase/demos/typography"
+import {
+  DataListDefault,
+  DataListDividers,
+  DataListLabelWidth,
+  DataListPlayground,
+  DataListRichValues,
+  DataListSizes,
+  DataListVertical,
+} from "@/showcase/demos/data-list"
+import {
+  TimelineBasic,
+  TimelineBulletsAndColors,
+  TimelineInteractive,
+  TimelineLineVariants,
+  TimelineOpposite,
+  TimelinePlayground,
+  TimelineReverseActive,
+  TimelineRight,
+} from "@/showcase/demos/timeline"
+import {
+  RingProgressAnimated,
+  RingProgressDefault,
+  RingProgressMultiple,
+  RingProgressPlayground,
+  RingProgressSectionGap,
+  RingProgressStartAngle,
+  RingProgressTooltips,
+} from "@/showcase/demos/ring-progress"
+import {
+  SemiCircleProgressAnimated,
+  SemiCircleProgressColors,
+  SemiCircleProgressDefault,
+  SemiCircleProgressLabelPositions,
+  SemiCircleProgressOrientations,
+  SemiCircleProgressPlayground,
+} from "@/showcase/demos/semi-circle-progress"
 
 // Deferred so their third-party dependency stays out of the initial bundle.
 const ChartArea = lazyDemo(() => import("@/showcase/demos/chart"), "ChartArea")
@@ -2174,6 +2210,458 @@ const typographyEntry: ComponentEntry = {
   ],
 }
 
+const dataListEntry: ComponentEntry = {
+  id: "data-list",
+  name: "Data List",
+  category: "Data Display",
+  description:
+    "Label-value pairs rendered as a semantic description list (dl, dt, dd), in a horizontal or stacked layout with optional dividers.",
+  sourcePath: "src/components/ui/data-list.tsx",
+  importStatement: 'import { DataList } from "@/components/ui/data-list"',
+  exports: [
+    "DataList",
+    "DataListItem",
+    "DataListItemLabel",
+    "DataListItemValue",
+  ],
+  keywords: ["description list", "dl", "dt", "dd", "key value", "details"],
+  notes: [
+    "DataList.Item, DataList.ItemLabel and DataList.ItemValue are also available as named exports.",
+    "labelWidth sets the minimum width of the label column; numbers are treated as px, strings as any CSS length. It is ignored when orientation is vertical.",
+    "Skipped upstream global styling props: classNames, styles, unstyled, vars, attributes, mod and style shorthands — use className and style instead.",
+  ],
+  playground: definePlayground({
+    tag: "DataList",
+    component: DataListPlayground,
+    controls: {
+      size: selectControl({
+        label: "Size",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "sm",
+      }),
+      gap: selectControl({
+        label: "Gap",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "sm",
+      }),
+      orientation: selectControl({
+        label: "Orientation",
+        options: ["horizontal", "vertical"],
+        defaultValue: "horizontal",
+      }),
+      withDivider: booleanControl({
+        label: "With divider",
+        defaultValue: false,
+      }),
+      labelWidth: numberControl({
+        label: "Label width",
+        defaultValue: 120,
+        min: 40,
+        max: 240,
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Default",
+      component: DataListDefault,
+      sourceModule: "data-list",
+      sourceExport: "DataListDefault",
+    },
+    {
+      id: "dividers",
+      title: "With dividers",
+      component: DataListDividers,
+      sourceModule: "data-list",
+      sourceExport: "DataListDividers",
+    },
+    {
+      id: "vertical",
+      title: "Vertical",
+      description: "Labels stack above their values.",
+      component: DataListVertical,
+      sourceModule: "data-list",
+      sourceExport: "DataListVertical",
+    },
+    {
+      id: "label-width",
+      title: "Label width",
+      component: DataListLabelWidth,
+      sourceModule: "data-list",
+      sourceExport: "DataListLabelWidth",
+    },
+    {
+      id: "sizes",
+      title: "Sizes and gaps",
+      component: DataListSizes,
+      sourceModule: "data-list",
+      sourceExport: "DataListSizes",
+    },
+    {
+      id: "rich-values",
+      title: "Rich values",
+      component: DataListRichValues,
+      sourceModule: "data-list",
+      sourceExport: "DataListRichValues",
+    },
+  ],
+}
+
+const timelineEntry: ComponentEntry = {
+  id: "timeline",
+  name: "Timeline",
+  category: "Data Display",
+  description:
+    "Displays a list of events in chronological order, with highlighted progress, custom bullets, opposite-side content and per-item line styles.",
+  sourcePath: "src/components/ui/timeline.tsx",
+  importStatement: 'import { Timeline } from "@/components/ui/timeline"',
+  exports: ["Timeline", "Timeline.Item"],
+  keywords: ["history", "events", "activity", "steps", "progress", "log"],
+  notes: [
+    "`active` is a 0-based index: items up to it get a highlighted bullet and the line below each item before it is filled. `reverseActive` highlights from the end instead without reordering items.",
+    "`color` and `Timeline.Item`'s `color` accept any CSS color. `radius` is limited to the xs–xl scale; `bulletSize` and `lineWidth` take a number (px) or a CSS length.",
+    "`autoContrast` picks a readable icon color on filled active bullets using CSS relative colors.",
+    "Passing `opposite` to any item switches the whole timeline to a three-column layout; `alternate` swaps the sides of one item.",
+    "Mantine's classNames/styles/unstyled/vars/attributes/mod props and BoxProps style shorthands have no equivalent here; use className/style.",
+  ],
+  playground: definePlayground({
+    tag: "Timeline",
+    component: TimelinePlayground,
+    controls: {
+      active: numberControl({
+        label: "Active",
+        defaultValue: 1,
+        min: -1,
+        max: 3,
+        step: 1,
+      }),
+      align: selectControl({
+        label: "Align",
+        options: ["left", "right"],
+        defaultValue: "left",
+      }),
+      radius: selectControl({
+        label: "Radius",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        defaultValue: "xl",
+      }),
+      bulletSize: numberControl({
+        label: "Bullet size",
+        defaultValue: 20,
+        min: 12,
+        max: 40,
+        step: 2,
+      }),
+      lineWidth: numberControl({
+        label: "Line width",
+        defaultValue: 4,
+        min: 1,
+        max: 8,
+        step: 1,
+      }),
+      reverseActive: booleanControl({
+        label: "Reverse active",
+        defaultValue: false,
+      }),
+      withBullets: booleanControl({
+        label: "Bullet icons",
+        defaultValue: false,
+      }),
+    },
+    snippet: (values) => {
+      const props: string[] = [`active={${values.active}}`]
+      if (values.align !== "left") props.push(`align="${values.align}"`)
+      if (values.radius !== "xl") props.push(`radius="${values.radius}"`)
+      if (values.bulletSize !== 20)
+        props.push(`bulletSize={${values.bulletSize}}`)
+      if (values.lineWidth !== 4) props.push(`lineWidth={${values.lineWidth}}`)
+      if (values.reverseActive) props.push("reverseActive")
+      const bullet = values.withBullets ? " bullet={<GitBranchIcon />}" : ""
+      return `<Timeline ${props.join(" ")}>
+  <Timeline.Item title="New branch"${bullet}>Created fix-notifications</Timeline.Item>
+  <Timeline.Item title="Commits"${bullet}>Forced push</Timeline.Item>
+  <Timeline.Item title="Pull request"${bullet}>Opened pull request #67</Timeline.Item>
+  <Timeline.Item title="Code review"${bullet}>Requested review</Timeline.Item>
+</Timeline>`
+    },
+  }),
+  stories: [
+    {
+      id: "basic",
+      title: "Basic",
+      component: TimelineBasic,
+      sourceModule: "timeline",
+      sourceExport: "TimelineBasic",
+    },
+    {
+      id: "align-right",
+      title: "Align right",
+      component: TimelineRight,
+      sourceModule: "timeline",
+      sourceExport: "TimelineRight",
+    },
+    {
+      id: "bullets-and-colors",
+      title: "Bullets, sizes and colors",
+      component: TimelineBulletsAndColors,
+      sourceModule: "timeline",
+      sourceExport: "TimelineBulletsAndColors",
+    },
+    {
+      id: "line-variants",
+      title: "Line variants",
+      component: TimelineLineVariants,
+      sourceModule: "timeline",
+      sourceExport: "TimelineLineVariants",
+    },
+    {
+      id: "reverse-active",
+      title: "Reverse active",
+      component: TimelineReverseActive,
+      sourceModule: "timeline",
+      sourceExport: "TimelineReverseActive",
+    },
+    {
+      id: "opposite",
+      title: "Opposite content",
+      description: "`opposite` and `alternate` use a three-column layout.",
+      component: TimelineOpposite,
+      sourceModule: "timeline",
+      sourceExport: "TimelineOpposite",
+    },
+    {
+      id: "interactive",
+      title: "Controlled with auto contrast",
+      component: TimelineInteractive,
+      sourceModule: "timeline",
+      sourceExport: "TimelineInteractive",
+    },
+  ],
+}
+
+const ringProgressEntry: ComponentEntry = {
+  id: "ring-progress",
+  name: "Ring Progress",
+  category: "Data Display",
+  description:
+    "A circular progress indicator drawn with SVG arcs. Supports multiple colored sections, rounded caps, section gaps, a center label, a custom start angle and per-section tooltips.",
+  sourcePath: "src/components/ui/ring-progress.tsx",
+  importStatement:
+    'import { RingProgress } from "@/components/ui/ring-progress"',
+  exports: ["RingProgress"],
+  keywords: ["circular", "progress", "donut", "gauge", "ring", "arc", "chart"],
+  notes: [
+    "Sections take value (0-100), color (any CSS color or var()) and an optional tooltip; any other SVG circle prop is forwarded to that section's circle.",
+    "thickness is clamped to size / 4. startAngle: 0 = right, 90 = bottom, 180 = left, 270 = top (default).",
+    "Arc math (dash arrays, offsets, layering order and round-cap placement) lives in src/hooks/ring-geometry.ts so other circular components can reuse it.",
+    "Tooltips follow the cursor over the section they belong to.",
+    "Skipped: global styling props (classNames, styles, unstyled, vars, attributes, mod and style shorthands such as m, p, w, h, bg). Use className and style instead.",
+    "color is a CSS color string rather than a theme color name.",
+  ],
+  playground: definePlayground({
+    tag: "RingProgress",
+    layout: "center",
+    component: RingProgressPlayground,
+    controls: {
+      size: numberControl({
+        label: "Size",
+        defaultValue: 120,
+        min: 40,
+        max: 240,
+        step: 4,
+      }),
+      thickness: numberControl({
+        label: "Thickness",
+        defaultValue: 12,
+        min: 2,
+        max: 60,
+      }),
+      roundCaps: booleanControl({ label: "Round caps", defaultValue: false }),
+      sectionGap: numberControl({
+        label: "Section gap (deg)",
+        defaultValue: 0,
+        min: 0,
+        max: 30,
+      }),
+      startAngle: numberControl({
+        label: "Start angle",
+        defaultValue: 270,
+        min: 0,
+        max: 360,
+        step: 15,
+      }),
+      transitionDuration: numberControl({
+        label: "Transition (ms)",
+        defaultValue: 0,
+        min: 0,
+        max: 2000,
+        step: 100,
+      }),
+      withLabel: booleanControl({
+        label: "Label",
+        defaultValue: true,
+        codeRole: "none",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Single section",
+      component: RingProgressDefault,
+      sourceModule: "ring-progress",
+      sourceExport: "RingProgressDefault",
+    },
+    {
+      id: "multiple",
+      title: "Multiple sections with round caps",
+      component: RingProgressMultiple,
+      sourceModule: "ring-progress",
+      sourceExport: "RingProgressMultiple",
+    },
+    {
+      id: "tooltips",
+      title: "Section tooltips",
+      description: "Hover a section to see its tooltip follow the cursor.",
+      component: RingProgressTooltips,
+      sourceModule: "ring-progress",
+      sourceExport: "RingProgressTooltips",
+    },
+    {
+      id: "section-gap",
+      title: "Section gap",
+      component: RingProgressSectionGap,
+      sourceModule: "ring-progress",
+      sourceExport: "RingProgressSectionGap",
+    },
+    {
+      id: "start-angle",
+      title: "Start angle",
+      component: RingProgressStartAngle,
+      sourceModule: "ring-progress",
+      sourceExport: "RingProgressStartAngle",
+    },
+    {
+      id: "animated",
+      title: "Animated transitions",
+      component: RingProgressAnimated,
+      sourceModule: "ring-progress",
+      sourceExport: "RingProgressAnimated",
+    },
+  ],
+}
+
+const semiCircleProgressEntry: ComponentEntry = {
+  id: "semi-circle-progress",
+  name: "Semi Circle Progress",
+  category: "Data Display",
+  description:
+    "A half-circle progress indicator drawn with SVG. Supports orientation, fill direction, custom segment colors, a label inside the arc and animated transitions.",
+  sourcePath: "src/components/ui/semi-circle-progress.tsx",
+  importStatement:
+    'import { SemiCircleProgress } from "@/components/ui/semi-circle-progress"',
+  exports: ["SemiCircleProgress"],
+  keywords: ["progress", "gauge", "semi", "circle", "half", "arc", "meter"],
+  notes: [
+    "value is clamped to 0-100. size is the diameter of the full circle; the visible height is size / 2.",
+    "orientation and fillDirection are applied as static flip/rotate classes on the SVG.",
+    "filledSegmentColor and emptySegmentColor take any CSS color or var(); they default to the primary and muted tokens.",
+    "Skipped: global styling props (classNames, styles, unstyled, vars, attributes, mod and style shorthands such as m, p, w, h, bg). Use className and style instead.",
+    "Colors are CSS color strings rather than theme color names.",
+  ],
+  playground: definePlayground({
+    tag: "SemiCircleProgress",
+    layout: "center",
+    component: SemiCircleProgressPlayground,
+    controls: {
+      value: numberControl({
+        label: "Value",
+        defaultValue: 60,
+        min: 0,
+        max: 100,
+      }),
+      size: numberControl({
+        label: "Size",
+        defaultValue: 200,
+        min: 80,
+        max: 320,
+        step: 10,
+      }),
+      thickness: numberControl({
+        label: "Thickness",
+        defaultValue: 12,
+        min: 2,
+        max: 40,
+      }),
+      orientation: selectControl({
+        label: "Orientation",
+        options: ["up", "down"],
+        defaultValue: "up",
+      }),
+      fillDirection: selectControl({
+        label: "Fill direction",
+        options: ["left-to-right", "right-to-left"],
+        defaultValue: "left-to-right",
+      }),
+      labelPosition: selectControl({
+        label: "Label position",
+        options: ["bottom", "center"],
+        defaultValue: "bottom",
+      }),
+      transitionDuration: numberControl({
+        label: "Transition (ms)",
+        defaultValue: 0,
+        min: 0,
+        max: 2000,
+        step: 100,
+      }),
+      withLabel: booleanControl({
+        label: "Label",
+        defaultValue: true,
+        codeRole: "none",
+      }),
+    },
+  }),
+  stories: [
+    {
+      id: "default",
+      title: "Default",
+      component: SemiCircleProgressDefault,
+      sourceModule: "semi-circle-progress",
+      sourceExport: "SemiCircleProgressDefault",
+    },
+    {
+      id: "colors",
+      title: "Colors and thickness",
+      component: SemiCircleProgressColors,
+      sourceModule: "semi-circle-progress",
+      sourceExport: "SemiCircleProgressColors",
+    },
+    {
+      id: "orientations",
+      title: "Orientation and fill direction",
+      component: SemiCircleProgressOrientations,
+      sourceModule: "semi-circle-progress",
+      sourceExport: "SemiCircleProgressOrientations",
+    },
+    {
+      id: "label-positions",
+      title: "Label position",
+      component: SemiCircleProgressLabelPositions,
+      sourceModule: "semi-circle-progress",
+      sourceExport: "SemiCircleProgressLabelPositions",
+    },
+    {
+      id: "animated",
+      title: "Animated transitions",
+      component: SemiCircleProgressAnimated,
+      sourceModule: "semi-circle-progress",
+      sourceExport: "SemiCircleProgressAnimated",
+    },
+  ],
+}
+
 export const dataDisplayEntries: readonly ComponentEntry[] = [
   alertEntry,
   anchorEntry,
@@ -2200,4 +2688,8 @@ export const dataDisplayEntries: readonly ComponentEntry[] = [
   themeIconEntry,
   titleEntry,
   typographyEntry,
+  dataListEntry,
+  timelineEntry,
+  ringProgressEntry,
+  semiCircleProgressEntry,
 ]

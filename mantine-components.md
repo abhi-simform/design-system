@@ -4,6 +4,9 @@ Components in Mantine's Core package (https://mantine.dev/core/package/) that
 we don't have an equivalent for yet, ordered so that anything a later
 component depends on is built first. Port with `/mantine-port <name> - <url>`.
 
+**Status: all 71 components are now ported.** The last 19 (Tree through
+Scroller, plus AppShell) landed together; see `src/showcase/registry/entries/`.
+
 Tiers are build batches, not strict sub-dependencies within a tier — items in
 the same tier can be done in any order relative to each other.
 
